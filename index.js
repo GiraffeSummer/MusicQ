@@ -50,7 +50,7 @@ app.get('/next', function (req, res) {
         //no new songs, find in playlist
 
 
-        yt.GetPlaylist({ playlistId: playlistID, key: auth.youtube }).then(function (data) {
+        yt.GetPlaylist({ playlistId: playlistID, key: auth.youtube, maxResults: 50 }).then(function (data) {
 
             player.queue.push(data.items[Random(data.items.length)]);
             let ret = {

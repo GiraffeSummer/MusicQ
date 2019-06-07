@@ -2,7 +2,7 @@ const request = require('request');
 
 module.exports.Search = function (
     params = {
-        q: "toto africa",
+        q: "",
         maxResults: 10,
         key: "",
         type: "channel,playlist,video",
@@ -64,10 +64,11 @@ module.exports.Search = function (
 module.exports.GetPlaylist = function (
     params = {
         playlistId: "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj",
-        key: ""
+        key: "",
+        maxResults: 10
     }
 ) {
-    var url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${params.playlistId}&maxResults=50&key=${params.key}`
+    var url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${params.playlistId}&maxResults=${params.maxResults}&key=${params.key}`
 
     return new Promise(function (resolve, reject) {
         request({
@@ -88,12 +89,8 @@ module.exports.GetPlaylist = function (
                 
                 itemList.push(a);
             });
-            
-
 
             resolve({pageInfo: body.pageInfo,items: itemList})
-           //console.log(body.items.length);
-            // resolve({ pageInfo: pageInfo, items: findings });
         });
     });
 
