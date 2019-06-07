@@ -11,7 +11,7 @@ feel free to use the scripts though.
 
 It's pretty messy but it works fine
 
-urls to use:
+urls to use: all start with "MusicQ/"
 
 / (nothing) - for adding music to the queue
 
