@@ -14,6 +14,7 @@ It's pretty messy but it works fine
 urls to use:
 
 / (nothing) - for adding music to the queue
+
 /player.html - make sure only 1 device (best option is a pc or laptop) is connected to this, this'll actually play the music and handle the queue.
 
 /q.html - to see the queue without the player messing with it.
