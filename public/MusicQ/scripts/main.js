@@ -7,7 +7,7 @@ function SendData() {
     let q = document.getElementById("searchTag");
     var obj = { "title": q.value };
     Post(obj, ApiUrl + "search").then(function (d) {
-        AddItems(d)
+        AddItems(d);
     });
 }
 
@@ -36,7 +36,6 @@ function GetURL(url) {
 }
 
 function AddItems(vids) {
-
     var table = document.getElementsByClassName("responsive-table");
     table = table[0];
     RemoveChildren(table)

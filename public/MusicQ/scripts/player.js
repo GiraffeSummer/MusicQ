@@ -58,7 +58,7 @@ function NextVideo() {
 }
 
 function ChangeVid(id) {
-    if(player !== undefined){
+    if (player !== undefined) {
         player.loadVideoById(id)
         player.playVideo();
     } else console.log("not an instance yet")
@@ -83,25 +83,25 @@ function Showqueue(vids) {
 
         var row = document.createElement("li");
         var cell1 = document.createElement("div")
-        // var cell2 = document.createElement("img")
+        //   var cell2 = document.createElement("img")//
         var cell3 = document.createElement("div")
 
         var anchor = document.createElement("a")
         row.appendChild(anchor);
 
         cell1.innerHTML = "<b>" + vids[i].title + "</b>";
-        // cell2.src = vids[i].thumbnails.default.url
+        //  cell2.src = vids[i][`thumbnails[default][url]`]//
         cell3.innerHTML = vids[i].channelTitle;
 
 
         anchor.setAttribute("name", vids[i].id);
         row.className = "table-row";
         cell1.className = "col col-1";
-        //cell2.className = "col col-2";
+        //cell2.className = "col col-2";//
         cell3.className = "col col-3";
 
         row.appendChild(cell1);
-        //  row.appendChild(cell2);
+        //  row.appendChild(cell2);//
         row.appendChild(cell3);
         table.appendChild(row);
     }
