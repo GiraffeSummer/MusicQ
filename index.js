@@ -84,7 +84,7 @@ app.post('/search', function (req, res) {
     var body = req.body;
     let title = body.title;
     console.log(title);
-    yt.Search({ q: title, maxResults: 25, key: auth.youtube, type: "video", videoEmbeddable: "true", videoSyndicated: "true" }).then(AddObjs).catch(function (e) { console.log(e) })
+    yt.Search({ q: title, maxResults: 25, key: auth.youtube, type: "video", videoEmbeddable: "true", videoSyndicated: "any" }).then(AddObjs).catch(function (e) { console.log(e) })
 
     function AddObjs(o) {
         res.setHeader('Content-Type', 'application/json');
