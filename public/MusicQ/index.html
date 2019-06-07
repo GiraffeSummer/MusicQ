@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Music App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='styles/style.css'>
+</head>
+
+<body>
+    <h3>Search music to add to the queue  <button id="qBtn" class="input" onclick="SeeQ()">See Queue</button></h3>
+    <div class="container"> 
+        <input class="input" type="text" name="q" id="searchTag" ><br>
+        <button id="searchBtn" class="input" onclick="SendData()">Search video</button>
+    </div>
+    <div class="Vids">
+        <table class="responsive-table"></table>
+    </div>
+    <script src='./scripts/main.js'></script>
+</body>
+
+</html>

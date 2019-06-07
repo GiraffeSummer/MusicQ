@@ -1,9 +1,6 @@
 "# music" 
 
-WIP
-
-Music app for queuing music in one playlist over multiple people remotely, it works together with https://github.com/GiraffeSummer/MusicQ
-as the front end.
+Music app for queuing music in one playlist over multiple people remotely
 
 you probably want to change the value for "playlistID" in "/index.js" it'll be the youtube playlist it'll use if you run out of queue videos to play, it'll pick a completely random video to play next from the first 50 videos in this list.
 

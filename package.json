@@ -1,0 +1,30 @@
+{
+  "name": "musicq",
+  "version": "1.0.0",
+  "description": "An application that can queue music for you via youtube",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiraffeSummer/MusicQ.git"
+  },
+  "keywords": [
+    "music",
+    "queue",
+    "playlist",
+    "youtube"
+  ],
+  "author": "Gido Selten",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GiraffeSummer/MusicQ/issues"
+  },
+  "homepage": "https://github.com/GiraffeSummer/MusicQ#readme"
+}
