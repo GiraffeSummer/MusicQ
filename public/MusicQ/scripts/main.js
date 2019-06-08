@@ -103,7 +103,7 @@ function JSON_to_URLEncoded(element, key, list) {
 function SeeQ() {
     switch (document.title) {
         case "Music App":
-            document.location.pathname = "/MusicQ/q.html";
+            document.location.pathname = "/MusicQ/Q";
             break;
         default:
             document.location.pathname = "/MusicQ/";
