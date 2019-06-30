@@ -1,4 +1,22 @@
+window.onload = function Start() {
 
+    let id = getParameterByName("id")
+    console.log("id: " + id);
+
+    if (id === undefined || id === 0 || id === null) {
+        //create new instance
+
+        //Create screen for this
+        if (window.confirm("Confirm: Join\nCancel: Create New")) {
+            document.location = updateQueryParameter(window.location.href, "id", window.prompt("Enter Instance name:", "party"));
+        } else {
+            Post({ name: window.prompt("Enter Instance name:", "party"), playlistId: "PLhi2YmQ3_ONkoWbNAZGudCOOg95nv_Es0" }, ApiUrl + "new").then(function (data) {
+                console.log(data)
+                document.location = updateQueryParameter(window.location.href, "id", data.id);
+            })
+        }
+    }
+}
 var getUrl = window.location;
 var ApiUrl = getUrl.protocol + "//" + getUrl.host + "/";
 
@@ -77,8 +95,14 @@ function vidClicked(vid) {
     console.log(vid.title);
 
     var obj = vid;
-    Post(obj, ApiUrl + "add").then(function (d) {
-        alert(d.title + " was added");
+    Post(obj, ApiUrl + "add" + `?id=${getParameterByName("id")}`).then(function (d) {
+        console.log(d);
+
+        if (("succes" in d))
+            document.location.pathname = "/"
+        else
+            alert(d.title + " was added");
+
     });
 }
 
@@ -109,4 +133,29 @@ function SeeQ() {
             document.location.pathname = "/MusicQ/";
             break;
     }
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+function updateQueryParameter(uri, key, value) {
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    }
+    else {
+        return uri + separator + key + "=" + value;
+    }
+}
+
+function Redirect(url) {
+    window.location.href = url;;//_nodes[index].url
 }

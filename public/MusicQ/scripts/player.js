@@ -10,13 +10,19 @@ function Start() {
 }
 
 function onYouTubeIframeAPIReady() {
-    GetURL(ApiUrl + "current").then(function (data) {
+
+    GetURL(ApiUrl + "current" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
         data = JSON.parse(data);
+
+        if (("success" in data)) {
+            document.location.pathname = ""
+            return;
+        }
 
         if (data.current !== undefined && data.current.id !== undefined) {
             CreatePlayer(data.current.id);
         } else {
-            GetURL(ApiUrl + "next").then(function (data2) {
+            GetURL(ApiUrl + "next" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data2) {
                 data2 = JSON.parse(data2);
 
                 CreatePlayer(data2.current.id);
@@ -49,8 +55,14 @@ function onPlayerStateChange(event) {
 }
 
 function NextVideo() {
-    GetURL(ApiUrl + "next").then(function (data) {
+    GetURL(ApiUrl + "next" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
         data = JSON.parse(data);
+
+        if (("success" in data)) {
+            document.location.pathname = ""
+            return;
+        }
+
         console.log("end");
         if (data.current !== undefined)
             ChangeVid(data.current.id);
@@ -66,11 +78,16 @@ function ChangeVid(id) {
 
 function LoopQueue() {
     setTimeout(LoopQueue, 500);
-
-    GetURL(ApiUrl + "current").then(function (data) {
+    GetURL(ApiUrl + "current" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
         data = JSON.parse(data);
-        now = data;
-        Showqueue(data.queue);
+
+        if (("success" in data)) {
+            document.location.pathname = ""
+            return;
+        } else {
+            now = data;
+            Showqueue(data.queue);
+        }
     })
 }
 
@@ -80,7 +97,6 @@ function Showqueue(vids) {
     table = table[0];
     RemoveChildren(table)
     for (let i = 0; i < vids.length; i++) {
-
         var row = document.createElement("li");
         var cell1 = document.createElement("div")
         //   var cell2 = document.createElement("img")//
