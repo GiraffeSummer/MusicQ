@@ -88,13 +88,29 @@ module.exports.GetPlaylist = function (
             url: url,
             json: true
         }, function (error, response, body) {
+            GetPlayListVids(body, url).then(function (playlist) {
+                resolve(playlist)
+            })
+        });
+    });
+}
 
-            var itemList = []
+function GetPlayListVids(body, url) {
+    return new Promise(function (resolve, reject) {
+        var itemList = []
+        var itemsRaw = body.items;
+        let nextToken = body.nextPageToken;
+        if (body.pageInfo === undefined) resolve(body); //invalid playlist
 
+        if (body.pageInfo.totalResults > body.pageInfo.resultsPerPage) {
+            GetAllVids();
+        } else Return();
+
+
+        function Return() {
             //map to proper object!!!
-            body.items.forEach(e => {
+            itemsRaw.forEach(e => {
                 let a = {}
-
                 a = e.snippet;
 
                 a.id = e.snippet.resourceId.videoId;
@@ -102,9 +118,22 @@ module.exports.GetPlaylist = function (
 
                 itemList.push(a);
             });
+            resolve({ pageInfo: body.pageInfo, items: itemList });
+        }
 
-            resolve({ pageInfo: body.pageInfo, items: itemList })
-        });
+        function GetAllVids() {
+            request({
+                url: url + `&pageToken=${nextToken}`,
+                json: true
+            }, function (error, response, body) {
+                Array.prototype.push.apply(itemsRaw, body.items)
+                if (body.nextPageToken) {
+                    nextToken = body.nextPageToken;
+                    GetAllVids();
+                } else {
+                    Return();
+                }
+            });
+        }
     });
-
 }

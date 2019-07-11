@@ -15,20 +15,23 @@
 <body>
     <script src="https://www.youtube.com/iframe_api"></script>
     <div class="left">
-        <div id="player"> </div>
+        <div>
+            <p id="vidTitle">Title</p>
+            <div id="player"></div>
+        </div>
         <br>
         <button id="controlBtn" class="input" onclick="NextVideo()">Skip ⏭</button>
     </div>
 
     <div class="right">
         <div class="PlayerVids">
+            <div id="qrcode"></div>
             <table class="responsive-table">
                 <h3><strong>QUEUE:</strong></h3>
-
             </table>
         </div>
     </div>
-
+    <script src='../scripts/qrcode.min.js'></script>
     <script src='../scripts/main.js'></script>
     <script src='../scripts/player.js'></script>
 </body>

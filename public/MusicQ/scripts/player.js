@@ -7,24 +7,34 @@ var player;
 
 function Start() {
     LoopQueue()
+    onYouTubeIframeAPIReady() //failsafe in case it's not being called
+    if (document.title == "Music Player")
+        GenerateQR()
 }
 
 function onYouTubeIframeAPIReady() {
+    if (loaded === true) return;
+    loaded = true;
 
+    console.log("Ready");
     GetURL(ApiUrl + "current" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
         data = JSON.parse(data);
 
         if (("success" in data)) {
-            document.location.pathname = ""
+            document.location.pathname = "/MusicQ/Room/"
             return;
         }
 
         if (data.current !== undefined && data.current.id !== undefined) {
+            let title = document.getElementById("vidTitle");
+            title.textContent = data.current.title;
             CreatePlayer(data.current.id);
         } else {
             GetURL(ApiUrl + "next" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data2) {
                 data2 = JSON.parse(data2);
 
+                let title = document.getElementById("vidTitle");
+                title.textContent = data2.current.title;
                 CreatePlayer(data2.current.id);
             });
         }
@@ -54,18 +64,38 @@ function onPlayerStateChange(event) {
     }
 }
 
+function GenerateQR() {
+    let qr_size = 160;
+    let destination = document.location.href.replace("/player", "");
+    var qrcode = new QRCode("qrcode", {
+        text: destination,
+        width: qr_size,
+        height: qr_size,
+        colorDark: "#000000",
+        colorLight: "#ffffff00"
+    });
+    var qr = document.getElementById("qrcode")
+    qr.addEventListener("click", function () {
+        window.open(destination, '_blank');
+    }, false);
+    qr.style.cursor = "pointer";
+}
+
 function NextVideo() {
     GetURL(ApiUrl + "next" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
         data = JSON.parse(data);
 
         if (("success" in data)) {
-            document.location.pathname = ""
+            document.location.pathname = "/MusicQ/Room/"
             return;
         }
 
         console.log("end");
-        if (data.current !== undefined)
+        if (data.current !== undefined) {
+            let title = document.getElementById("vidTitle");
+            title.textContent = data.current.title;
             ChangeVid(data.current.id);
+        }
     });
 }
 
@@ -82,7 +112,7 @@ function LoopQueue() {
         data = JSON.parse(data);
 
         if (("success" in data)) {
-            document.location.pathname = ""
+            document.location.pathname = "/MusicQ/Room/"
             return;
         } else {
             now = data;

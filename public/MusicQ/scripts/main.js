@@ -7,14 +7,16 @@ window.onload = function Start() {
         //create new instance
 
         //Create screen for this
-        if (window.confirm("Confirm: Join\nCancel: Create New")) {
-            document.location = updateQueryParameter(window.location.href, "id", window.prompt("Enter Instance name:", "party"));
-        } else {
-            Post({ name: window.prompt("Enter Instance name:", "party"), playlistId: "PLhi2YmQ3_ONkoWbNAZGudCOOg95nv_Es0" }, ApiUrl + "new").then(function (data) {
-                console.log(data)
-                document.location = updateQueryParameter(window.location.href, "id", data.id);
-            })
-        }
+        /*  if (window.confirm("Confirm: Join\nCancel: Create New")) {
+              document.location = updateQueryParameter(window.location.href, "id", window.prompt("Enter Instance name:", "party"));
+          } else {
+              Post({ name: window.prompt("Enter Instance ID:", "party"), playlistId: "PLhi2YmQ3_ONkoWbNAZGudCOOg95nv_Es0" }, ApiUrl + "new").then(function (data) {
+                  console.log(data)
+                  document.location = updateQueryParameter(window.location.href + "player/", "id", data.id);
+              })
+          }*/
+
+        document.location.pathname = "/MusicQ/Room/";
     }
 }
 var getUrl = window.location;
@@ -99,7 +101,7 @@ function vidClicked(vid) {
         console.log(d);
 
         if (("succes" in d))
-            document.location.pathname = "/"
+            document.location.pathname = "/MusicQ/Room/"
         else
             alert(d.title + " was added");
 
@@ -144,6 +146,26 @@ function getParameterByName(name, url) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+function GetPlayListIDFromUrl(url = document.location.href) {
+    let id = parseQueryString(url)["list"]
+    if (id !== undefined) {
+        return id;
+    } else return null;
+}
+
+var parseQueryString = function () {
+    var str = window.location.search;
+    var objURL = {};
+
+    str.replace(
+        new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+        function ($0, $1, $2, $3) {
+            objURL[$1] = $3;
+        }
+    );
+    return objURL;
+};
 
 function updateQueryParameter(uri, key, value) {
     var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");

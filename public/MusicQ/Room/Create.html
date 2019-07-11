@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<!--
+    Create Room
+-->
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Room Creator</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+
+</head>
+
+<body>
+    <div class="container">
+        <fieldset>
+            <legend>Room Settings:</legend>
+            Name:<br>
+            <input id="roomName" type="text" name="name" value="Room"><br>
+            Password (leave blank for no password):<br>
+            <input id="roomPass" type="text" name="pass" value=""><br><br>
+            Playlist (paste Youtube playlist url here):<br>
+            <input id="roomPlaylist" type="text" name="playlist" value=""><br>
+            if left blank, it'll pick  <a href="https://www.youtube.com/playlist?list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj">this default one</a>.<br><br>
+            <input onclick="CreateRoom()" type="submit" value="Create Room">
+        </fieldset>
+    </div>
+
+    <script src='../scripts/main.js'></script>
+    <script src='../scripts/rooms.js'></script>
+</body>
+
+</html>

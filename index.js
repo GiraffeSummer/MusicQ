@@ -6,14 +6,16 @@ var auth;
 const app = express()
 
 //var playlistID = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj";  //default random playlist change to your liking
-
+const defaultPlaylist = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"; //default random playlist change to your liking
 var port;
 
 var players = {}
 var player = {
     name: "",
     id: 0,
+    password: "",
     playlistId: "",
+    timestamp: 0,
     np: {},
     queue: [],
     previous: []
@@ -41,7 +43,7 @@ app.use(function (req, res, nextt) {
 });
 
 
-app.get('/', function (req, res) { res.redirect('/MusicQ'); })
+app.get('/', function (req, res) { res.redirect('/MusicQ/Room'); })
 
 
 app.get('/next', function (req, res) {
@@ -55,6 +57,9 @@ app.get('/next', function (req, res) {
 
 
     let id = req.query.id;
+
+    let now = Math.round(Date.now() / 1000);
+    players[id].timestamp = now;
 
     if (players[id].queue.length >= 1) {
         let ret = {
@@ -72,7 +77,13 @@ app.get('/next', function (req, res) {
 
 
         yt.GetPlaylist({ playlistId: players[id].playlistId, key: auth.youtube, maxResults: 50 }).then(function (data) {
-
+            if (data.items === undefined) {
+                res.setHeader('Content-Type', 'application/json');
+                res.send({ current: { title: "Wrong playlist (private don't work)", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" } });
+                res.end();
+                console.log("invalid playlist");
+                return;
+            }
             players[id].queue.push(data.items[Random(data.items.length)]);
             let ret = {
                 Old: players[id].np,
@@ -107,21 +118,56 @@ app.get('/current', function (req, res) {
         res.send(JSON.stringify({ success: false }));
         res.end();
     }
-
-
 })
+
+app.get('/rooms', function (req, res) {
+    GenerateRoomList(ReturnObj);
+
+    function ReturnObj(ret) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(ret));
+        res.end();
+    }
+})
+
+
+function GenerateRoomList(callback) {
+    var rooms = [];
+    var obj = {
+        name: "",
+        id: 0,
+        password: "",
+        playlistId: "",
+        current: ""
+    };
+    for (let index = 0; index < Object.keys(players).length; index++) {
+        let o = JSON.parse(JSON.stringify(obj));
+
+        o.name = players[Object.keys(players)[index]].name;
+        o.id = players[Object.keys(players)[index]].id;
+        o.password = players[Object.keys(players)[index]].password;
+        o.playlistId = players[Object.keys(players)[index]].playlistId;
+        o.current = players[Object.keys(players)[index]].np;
+        rooms.push(o);
+    }
+    callback(rooms);
+}
+
 
 
 app.post('/new', function (req, res) {
     var body = req.body;
 
     let obj = JSON.parse(JSON.stringify(player));
+    let now = Math.round(Date.now() / 1000);
     obj.name = body.name;
-    obj.playlistId = body.playlistId;
+    obj.playlistId = (body.playlistId !== undefined && body.playlistId !== "undefined") ? body.playlistId : defaultPlaylist;
     obj.id = GenerateId();
+    obj.password = body.password;
+    obj.timestamp = now;
 
     players[obj.id] = obj;
-    console.log(obj)
+    console.log(`New Room: ${obj.name} - "${obj.password}" - ${obj.id}`)
 
     res.setHeader('Content-Type', 'application/json');
     res.send(obj);
@@ -132,7 +178,7 @@ app.post('/new', function (req, res) {
 app.post('/search', function (req, res) {
     var body = req.body;
     let title = body.title;
-    console.log(title);
+    console.log(`Search: ` + title);
     yt.Search({ q: title, maxResults: 25, key: auth.youtube, type: "video", videoEmbeddable: "true", videoSyndicated: "any" }).then(AddObjs).catch(function (e) { console.log(e) })
 
     function AddObjs(o) {
@@ -154,6 +200,8 @@ app.post('/add', function (req, res) {
         return;
     }
 
+    let now = Math.round(Date.now() / 1000);
+    players[id].timestamp = now;
 
     players[id].queue.push(body);
     AddObjs(body);
@@ -168,12 +216,28 @@ app.post('/add', function (req, res) {
 
 app.listen(port, function () {
     console.log(`Music listening on port ${port}!`)
+    setInterval(PurgeRooms, 36000000)//36000000
 })
+
+function PurgeRooms() {
+    let compare = 36000;
+    let now = Math.round(Date.now() / 1000);
+    for (let index = 0; index < Object.keys(players).length; index++) {
+
+        if ((now - compare) >= players[Object.keys(players)[index]].timestamp) {
+            console.log(`Out of time: ${players[Object.keys(players)[index]].name}`);
+            delete players[Object.keys(players)[index]]
+        } 
+        //players[Object.keys(players)[index]].name;
+    }
+}
 
 function ShiftSong(id) {
     if (!(Object.entries(players[id].np).length === 0 && players[id].np.constructor === Object))//check if object is not empty
         players[id].previous.unshift(players[id].np);
     players[id].np = players[id].queue.shift();
+    let now = Math.round(Date.now() / 1000);
+    players[id].timestamp = now;
 }
 
 function Random(max) { return (Math.floor(Math.random() * max)); }
