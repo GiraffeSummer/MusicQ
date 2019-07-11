@@ -227,7 +227,7 @@ function PurgeRooms() {
         if ((now - compare) >= players[Object.keys(players)[index]].timestamp) {
             console.log(`Out of time: ${players[Object.keys(players)[index]].name}`);
             delete players[Object.keys(players)[index]]
-        } 
+        }
         //players[Object.keys(players)[index]].name;
     }
 }
