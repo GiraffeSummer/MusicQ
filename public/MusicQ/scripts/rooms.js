@@ -78,10 +78,10 @@ function ShowRooms(rooms) {
 
         var anchor = document.createElement("a")
         row.appendChild(anchor);
-
-        cell1.innerHTML = "<b>" + rooms[i].name + "</b>";
+        (rooms[i].password !== "") ?
+            cell1.innerHTML = "🔒 <b>" + rooms[i].name + "</b>" :
+            cell1.innerHTML = "<b>" + rooms[i].name + "</b>";
         //cell1.innerHTML += "&nbsp; - &nbsp;\nRoom id: " + rooms[i].id;
-        if (rooms[i].password !== "") cell1.textContent += "  🔒";
 
         if (rooms[i].current !== undefined && rooms[i].current.thumbnails !== undefined)
             cell2.src = rooms[i].current.thumbnails.default.url//
