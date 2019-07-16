@@ -126,7 +126,12 @@ function JSON_to_URLEncoded(element, key, list) {
     return list.join('&');
 }
 
-function SeeQ() {
+function SeeQ(a = null) {
+    if (a !== null) {
+        document.location.pathname = `/MusicQ/${a}`;
+        return;
+    }
+    
     switch (document.title) {
         case "Music App":
             document.location.pathname = "/MusicQ/Q";

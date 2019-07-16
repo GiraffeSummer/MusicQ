@@ -6,10 +6,24 @@ var loaded = false;
 var player;
 
 function Start() {
-    LoopQueue()
-    onYouTubeIframeAPIReady() //failsafe in case it's not being called
-    if (document.title == "Music Player")
-        GenerateQR()
+    if (document.title != "Playlist") {
+        LoopQueue()
+        onYouTubeIframeAPIReady() //failsafe in case it's not being called
+        if (document.title == "Music Player")
+            GenerateQR()
+    } else {
+        GetURL(ApiUrl + "playlist" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
+            data = JSON.parse(data);
+            console.log(data)
+            if (("success" in data)) {
+                document.location.pathname = "/MusicQ/Room/"
+                return;
+            }
+            console.log(data.items)
+            Showqueue(data.items, true)
+        });
+
+    }
 }
 
 function onYouTubeIframeAPIReady() {
@@ -121,7 +135,7 @@ function LoopQueue() {
     })
 }
 
-function Showqueue(vids) {
+function Showqueue(vids, showimgs = false) {
 
     var table = document.getElementsByClassName("responsive-table");
     table = table[0];
@@ -129,25 +143,25 @@ function Showqueue(vids) {
     for (let i = 0; i < vids.length; i++) {
         var row = document.createElement("li");
         var cell1 = document.createElement("div")
-        //   var cell2 = document.createElement("img")//
+        if (showimgs) var cell2 = document.createElement("img")//
         var cell3 = document.createElement("div")
 
         var anchor = document.createElement("a")
         row.appendChild(anchor);
 
         cell1.innerHTML = "<b>" + vids[i].title + "</b>";
-        //  cell2.src = vids[i][`thumbnails[default][url]`]//
+        if (showimgs) cell2.src = vids[i].thumbnails.default.url;//vids[i][`thumbnails[default][url]`]//
         cell3.innerHTML = vids[i].channelTitle;
 
 
         anchor.setAttribute("name", vids[i].id);
         row.className = "table-row";
         cell1.className = "col col-1";
-        //cell2.className = "col col-2";//
+        if (showimgs) cell2.className = "col col-2";//
         cell3.className = "col col-3";
 
         row.appendChild(cell1);
-        //  row.appendChild(cell2);//
+        if (showimgs) row.appendChild(cell2);//
         row.appendChild(cell3);
         table.appendChild(row);
     }
