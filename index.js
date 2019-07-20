@@ -2,7 +2,6 @@
 var yt = require('./youtubeWrapper');
 const express = require('express')
 const bodyParser = require('body-parser');
-
 var auth;
 const app = express()
 
@@ -34,8 +33,6 @@ try {
     port = process.env.PORT;
     // playlistID = process.env.playlist
 }
-var proxy = require('redbird')({port: 80});
-proxy.register("musicq.cripplerick.com", "http://86.94.249.209:8082");
 
 
 try {
