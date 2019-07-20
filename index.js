@@ -2,7 +2,7 @@
 var yt = require('./youtubeWrapper');
 const express = require('express')
 const bodyParser = require('body-parser');
-var proxy = require('redbird')({port: 80});
+
 var auth;
 const app = express()
 
@@ -10,7 +10,6 @@ const app = express()
 const defaultPlaylist = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"; //default random playlist change to your liking
 var port;
 
-proxy.register("musicq.cripplerick.com", "http://86.94.249.209:8082");
 
 var players = {}
 var player = {
@@ -35,6 +34,8 @@ try {
     port = process.env.PORT;
     // playlistID = process.env.playlist
 }
+var proxy = require('redbird')({port: port});
+proxy.register("musicq.cripplerick.com", "http://86.94.249.209:8082");
 
 
 try {
