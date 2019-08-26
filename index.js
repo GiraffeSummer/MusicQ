@@ -1,11 +1,9 @@
-//const request = require('request');
 var yt = require('./youtubeWrapper');
 const express = require('express')
 const bodyParser = require('body-parser');
 var auth;
 const app = express()
 
-//var playlistID = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj";  //default random playlist change to your liking
 const defaultPlaylist = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"; //default random playlist change to your liking
 var port;
 
@@ -25,19 +23,15 @@ var player = {
 try {
     auth = require('./auth.json');
     baseUrl = auth.url;
-    // playlistID = auth.playlist;
     port = 8082;
 } catch (error) {
     console.log(error)
     auth = { youtube: process.env.yt }
     port = process.env.PORT;
-    // playlistID = process.env.playlist
 }
 
 
 try {
-
-
     app.use(express.static('public'));
     app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -46,7 +40,6 @@ try {
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         nextt();
     });
-
 
     app.get('/', function (req, res) { res.redirect('/MusicQ/Room'); })
 
@@ -58,7 +51,6 @@ try {
             res.end();
             return;
         }
-
 
         let id = req.query.id;
 
@@ -78,7 +70,6 @@ try {
             ShiftSong(id);
         } else {
             //no new songs, find in playlist
-
 
             yt.GetPlaylist({ playlistId: players[id].playlistId, key: auth.youtube, maxResults: 50 }).then(function (data) {
                 if (data.items === undefined) {
@@ -166,7 +157,12 @@ try {
         let now = Math.round(Date.now() / 1000);
         obj.name = body.name;
         obj.playlistId = (body.playlistId !== undefined && body.playlistId !== "undefined") ? body.playlistId : defaultPlaylist;
-        obj.id = GenerateId();
+        let _id = GenerateId();
+
+        //making sure no duplicate id will be generated
+        while (_id in players) _id = GenerateId(); //Will most likely not run (because no duplicate was generated)
+
+        obj.id = _id;
         obj.password = body.password;
         obj.timestamp = now;
 
@@ -255,7 +251,6 @@ try {
                 console.log(`Out of time: ${players[Object.keys(players)[index]].name}`);
                 delete players[Object.keys(players)[index]]
             }
-            //players[Object.keys(players)[index]].name;
         }
     }
 
