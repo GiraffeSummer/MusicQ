@@ -77,7 +77,8 @@ function ShowRooms(rooms) {
         var cell3 = document.createElement("div")
 
         var anchor = document.createElement("a")
-        row.appendChild(anchor);
+        anchor.setAttribute("name", rooms[i].id);
+        
         (rooms[i].password !== "") ?
             cell1.innerHTML = "🔒 <b>" + rooms[i].name + "</b>" :
             cell1.innerHTML = "<b>" + rooms[i].name + "</b>";
@@ -92,13 +93,14 @@ function ShowRooms(rooms) {
             JoinRoom(rooms[i]);
         }, false);
 
-        anchor.setAttribute("name", rooms[i].id);
+        
         row.className = "table-row";
         cell1.className = "col col-1";
         cell2.className = "col col-2";//
         cell3.className = "col col-3";
 
         row.appendChild(cell1);
+        row.appendChild(anchor);
         row.appendChild(cell2);//
         row.appendChild(cell3);
         table.appendChild(row);
