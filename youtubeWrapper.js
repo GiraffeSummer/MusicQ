@@ -28,7 +28,6 @@ module.exports.Search = function (
             var findings = result.items.map(function (item) {
                 var link = ''
                 var id = ''
-                var thumbnails = {};
                 switch (item.id.kind) {
                     case 'youtube#channel':
                         link = 'https://www.youtube.com/channel/' + item.id.channelId
@@ -44,18 +43,6 @@ module.exports.Search = function (
                         break
                 }
 
-
-                for (tn in item.snippet.thumbnails) {
-                    thumbnails[tn] = {};
-                    thumbnails[tn] = item.snippet.thumbnails[tn]
-                    for (tbn in thumbnails[tn]) {
-                        //console.log(tbn)
-                        thumbnails[tn][tbn] = item.snippet.thumbnails[tn][tbn]
-                    }
-                }
-
-                //console.log(item.snippet.thumbnails)
-
                 return {
                     id: id,
                     link: link,
@@ -65,7 +52,7 @@ module.exports.Search = function (
                     channelTitle: item.snippet.channelTitle,
                     title: item.snippet.title,
                     description: item.snippet.description,
-                    thumbnails: thumbnails//item.snippet.thumbnails
+                    thumbnails: item.snippet.thumbnails
                 }
             })
             resolve({ pageInfo: pageInfo, items: findings });
