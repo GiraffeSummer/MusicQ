@@ -1,5 +1,7 @@
 window.onload = Start();
 
+let currentRooms;
+
 function Start() {
     if (document.title == "Room Picker") {
         LoopRooms();
@@ -11,8 +13,10 @@ function Start() {
 function LoopRooms() {
     GetURL(ApiUrl + "rooms").then(function (data) {
         data = JSON.parse(data);
-
-        ShowRooms(data);
+        if (currentRooms == undefined || JSON.stringify(currentRooms) != JSON.stringify(data)) {
+            currentRooms = data;
+            ShowRooms(data);
+        }
     })
 }
 
@@ -78,7 +82,7 @@ function ShowRooms(rooms) {
 
         var anchor = document.createElement("a")
         anchor.setAttribute("name", rooms[i].id);
-        
+
         (rooms[i].password !== "") ?
             cell1.innerHTML = "🔒 <b>" + rooms[i].name + "</b>" :
             cell1.innerHTML = "<b>" + rooms[i].name + "</b>";
@@ -93,7 +97,7 @@ function ShowRooms(rooms) {
             JoinRoom(rooms[i]);
         }, false);
 
-        
+
         row.className = "table-row";
         cell1.className = "col col-1";
         cell2.className = "col col-2";//
