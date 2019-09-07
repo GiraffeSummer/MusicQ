@@ -201,7 +201,7 @@ function AddMetaTags() {
                 //general meta tag
                 return;
             } else {
-                // document.getElementsByTagName('html')[0].setAttribute("prefix","og: http://ogp.me/ns#")
+                document.getElementsByTagName('html')[0].setAttribute("prefix","og: http://ogp.me/ns#")
 
                 let head = document.getElementsByTagName('head')[0];
 
