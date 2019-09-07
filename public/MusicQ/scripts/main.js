@@ -201,40 +201,49 @@ function AddMetaTags() {
                 //general meta tag
                 return;
             } else {
+                // document.getElementsByTagName('html')[0].setAttribute("prefix","og: http://ogp.me/ns#")
+
+                let head = document.getElementsByTagName('head')[0];
+
                 let meta = document.createElement('meta');
                 meta.content = "#93E6FA";
                 meta.name = "theme-color";
-                meta.setAttribute('property', "og:theme-color");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                meta.setAttribute('property', "theme-color");
+                head.appendChild(meta);
 
                 meta = document.createElement('meta');
                 meta.content = "MusicQ";
                 meta.setAttribute('property', "og:title");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                head.appendChild(meta);
+
+                meta = document.createElement('meta');
+                meta.content = "MusicQ";
+                meta.setAttribute('property', "og:site_name");
+                head.appendChild(meta);
 
                 let description = data.current.title;
 
                 meta = document.createElement('meta');
                 meta.content = description;
                 meta.setAttribute('property', "og:description");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                head.appendChild(meta);
 
                 meta = document.createElement('meta');
                 meta.content = data.current.thumbnails.default.url;
                 meta.setAttribute('property', "og:image");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                head.appendChild(meta);
 
                 meta = document.createElement('meta');
                 meta.content = "website";
                 meta.name = "og:type";
                 meta.setAttribute('property', "og:type");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                head.appendChild(meta);
 
                 meta = document.createElement('meta');
                 meta.content = document.URL;
                 meta.name = "og:url";
                 meta.setAttribute('property', "og:url");
-                document.getElementsByTagName('head')[0].appendChild(meta);
+                head.appendChild(meta);
             }
         })
     }
