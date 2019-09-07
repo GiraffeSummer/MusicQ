@@ -206,43 +206,43 @@ function AddMetaTags() {
                 let head = document.getElementsByTagName('head')[0];
 
                 let meta = document.createElement('meta');
+                meta.setAttribute('property', "theme-color");
                 meta.content = "#93E6FA";
                 meta.name = "theme-color";
-                meta.setAttribute('property', "theme-color");
                 head.appendChild(meta);
 
                 meta = document.createElement('meta');
-                meta.content = "MusicQ";
                 meta.setAttribute('property', "og:title");
+                meta.content = "MusicQ";
                 head.appendChild(meta);
 
                 meta = document.createElement('meta');
-                meta.content = "MusicQ";
                 meta.setAttribute('property', "og:site_name");
+                meta.content = "MusicQ";
                 head.appendChild(meta);
 
                 let description = data.current.title;
 
                 meta = document.createElement('meta');
-                meta.content = description;
                 meta.setAttribute('property', "og:description");
+                meta.content = description;
                 head.appendChild(meta);
 
                 meta = document.createElement('meta');
-                meta.content = data.current.thumbnails.default.url;
                 meta.setAttribute('property', "og:image");
+                meta.content = data.current.thumbnails.default.url;
                 head.appendChild(meta);
 
                 meta = document.createElement('meta');
+                meta.setAttribute('property', "og:type");
                 meta.content = "website";
                 meta.name = "og:type";
-                meta.setAttribute('property', "og:type");
                 head.appendChild(meta);
 
                 meta = document.createElement('meta');
+                meta.setAttribute('property', "og:url");
                 meta.content = document.URL;
                 meta.name = "og:url";
-                meta.setAttribute('property', "og:url");
                 head.appendChild(meta);
             }
         })
