@@ -240,11 +240,11 @@ try {
 
     app.listen(port, function () {
         console.log(`Music listening on port ${port}!`)
-        setInterval(PurgeRooms, 36000000)//36000000
+        setInterval(PurgeRooms, 36000)//36000000 //for every 10 hours 1 hour inactive
     })
-
+    //rn every 1 hour 10 hours inactive
     function PurgeRooms() {
-        let compare = 36000;
+        let compare = 36000000;//36000 //for every 10 hours 1 hour inactive
         let now = Math.round(Date.now() / 1000);
         for (let index = 0; index < Object.keys(players).length; index++) {
             if ((now - compare) >= players[Object.keys(players)[index]].timestamp) {
@@ -285,7 +285,7 @@ try {
 } catch (error) {
     const fs = require('fs')
 
-    var date = new Date();
+    let date = new Date();
     fs.writeFileSync(`./errors/${date.toDateString()}.txt`, error);
 
     function SaveJson(json, location) {

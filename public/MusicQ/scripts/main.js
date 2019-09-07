@@ -1,3 +1,5 @@
+var getUrl = window.location;
+var ApiUrl = getUrl.protocol + "//" + getUrl.host + "/";
 window.onload = function Start() {
 
     let id = getParameterByName("id")
@@ -18,9 +20,9 @@ window.onload = function Start() {
 
         document.location.pathname = "/MusicQ/Room/";
     }
+
+    AddMetaTags();
 }
-var getUrl = window.location;
-var ApiUrl = getUrl.protocol + "//" + getUrl.host + "/";
 
 
 function SendData() {
@@ -131,7 +133,7 @@ function SeeQ(a = null) {
         document.location.pathname = `/MusicQ/${a}`;
         return;
     }
-    
+
     switch (document.title) {
         case "Music App":
             document.location.pathname = "/MusicQ/Q";
@@ -185,4 +187,55 @@ function updateQueryParameter(uri, key, value) {
 
 function Redirect(url) {
     window.location.href = url;;//_nodes[index].url
+}
+
+function AddMetaTags() {
+    let id = getParameterByName("id");
+
+    if (id !== undefined || id !== 0 || id !== null) {
+        GetURL(ApiUrl + "current?id=" + id).then(function (data) {
+            data = JSON.parse(data);
+            console.log(data)
+
+            if (("success" in data)) {
+                //general meta tag
+                return;
+            } else {
+                let meta = document.createElement('meta');
+                meta.content = "#93E6FA";
+                meta.name = "theme-color";
+                meta.setAttribute('property', "og:theme-color");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+
+                meta = document.createElement('meta');
+                meta.content = "MusicQ";
+                meta.setAttribute('property', "og:title");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+
+                let description = data.current.title;
+
+                meta = document.createElement('meta');
+                meta.content = description;
+                meta.setAttribute('property', "og:description");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+
+                meta = document.createElement('meta');
+                meta.content = data.current.thumbnails.default.url;
+                meta.setAttribute('property', "og:image");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+
+                meta = document.createElement('meta');
+                meta.content = "website";
+                meta.name = "og:type";
+                meta.setAttribute('property', "og:type");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+
+                meta = document.createElement('meta');
+                meta.content = document.URL;
+                meta.name = "og:url";
+                meta.setAttribute('property', "og:url");
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }
+        })
+    }
 }
