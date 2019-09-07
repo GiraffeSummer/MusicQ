@@ -20,8 +20,6 @@ window.onload = function Start() {
 
         document.location.pathname = "/MusicQ/Room/";
     }
-
-    AddMetaTags();
 }
 
 
