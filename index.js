@@ -216,13 +216,14 @@ try {
 
     app.get('/checkplaylist', function (req, res) {
         let playlistId = req.query.playlistId;
-        console.log("checking playlist: " + playlistId);
         yt.GetPlaylistInfo({ playlistId: playlistId, key: auth.youtube, maxResults: 1 }).then(function (data) {
+            
 
             let pl;
             if (data && data.items.length > 0)
                 pl = data.items[0].snippet;
             else pl = undefined;
+            console.log("playlist found: " + pl.title);
 
             res.setHeader('Content-Type', 'application/json');
             res.send({ valid: (data && data.items.length > 0), used: playlistId, playlist: pl });
