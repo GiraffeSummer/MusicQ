@@ -36,7 +36,7 @@ function CheckPlaylist() {
             alert(`Playlist found: ${data.playlist.title}`);
         }
         else {
-            alert("No playlist found");
+            alert("No playlist found (make sure it's unlisted or public, not private!)");
         }
     });
 }
