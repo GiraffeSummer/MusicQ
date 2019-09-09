@@ -135,6 +135,22 @@ function LoopQueue() {
     })
 }
 
+function KeepAlive(_keep) {
+    keep = _keep;
+    if (keep) {
+        let keepAlive = setInterval(function () {
+            console.log("loop")
+            if (keep == true) {
+                GetURL(ApiUrl + "rooms").then(function (data) {
+                    data = JSON.parse(data);
+                })
+            } else {
+                clearInterval(keepAlive)
+            }
+        }, 300000) //every 5 minutes
+    }
+}
+
 function Showqueue(vids, showimgs = false) {
 
     var table = document.getElementsByClassName("responsive-table");

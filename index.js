@@ -47,7 +47,7 @@ try {
 
         if (!("id" in req.query && players[req.query.id])) {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ success: false }));
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
             res.end();
             return;
         }
@@ -110,7 +110,7 @@ try {
 
         } else {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ success: false }));
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
             res.end();
         }
     })
@@ -127,8 +127,8 @@ try {
 
 
     function GenerateRoomList(callback) {
-        var rooms = [];
-        var obj = {
+        let rooms = [];
+        let obj = {
             name: "",
             id: 0,
             password: "",
@@ -195,7 +195,7 @@ try {
 
         if (!("id" in req.query && players[req.query.id])) {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ success: false }));
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
             res.end();
             return;
         }
@@ -213,10 +213,29 @@ try {
         }
     })
 
+    app.get('/keepalive', function (req, res) {
+        if (!("id" in req.query && players[req.query.id])) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
+            res.end();
+            return;
+        }
+
+        let id = req.query.id;
+
+        let now = Math.round(Date.now() / 1000);
+        players[id].timestamp = now;
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(players[id]));
+        res.end();
+
+    })
+
     app.get('/playlist', function (req, res) {
         if (!("id" in req.query && players[req.query.id])) {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ success: false }));
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
             res.end();
             return;
         }

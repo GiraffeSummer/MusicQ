@@ -20,6 +20,7 @@ function LoopRooms() {
     })
 }
 
+
 function ClickCreateRoom() {
     document.location.pathname = "MusicQ/Room/Create.html";
 }

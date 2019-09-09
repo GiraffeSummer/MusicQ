@@ -7,12 +7,19 @@
     <title>Music App</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='styles/style.css'>
+    <meta name="theme-color" content="#93E6FA">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MusicQ" />
+    <meta property="og:description" content="Music App for everyone to Queue music remotely using their own phone" />
+    <meta property="og:url" content="http://musicq.cripplerick.com/" />
+    <meta property="og:image" content="" />
 </head>
 
 <body>
-    <h3>Search music to add to the queue  <button id="qBtn" class="input" onclick="SeeQ()">See Queue</button><button id="qBtn" class="input" onclick="SeeQ(`playlistview`)">See Playlist</button></h3>
-    <div class="container"> 
-        <input class="input" type="text" name="q" id="searchTag" ><br>
+    <h3>Search music to add to the queue <button id="qBtn" class="input" onclick="SeeQ()">See Queue</button><button
+            id="qBtn" class="input" onclick="SeeQ(`playlistview`)">See Playlist</button></h3>
+    <div class="container">
+        <input class="input" type="text" name="q" id="searchTag"><br>
         <button id="searchBtn" class="input" onclick="SendData()">Search video</button>
     </div>
     <div class="Vids">

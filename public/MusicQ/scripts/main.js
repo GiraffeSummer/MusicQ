@@ -1,7 +1,6 @@
 var getUrl = window.location;
 var ApiUrl = getUrl.protocol + "//" + getUrl.host + "/";
 window.onload = function Start() {
-
     let id = getParameterByName("id")
     console.log("id: " + id);
 
@@ -199,10 +198,10 @@ function AddMetaTags() {
                 //general meta tag
                 return;
             } else {
-                document.getElementsByTagName('html')[0].setAttribute("prefix","og: http://ogp.me/ns#")
 
                 let head = document.getElementsByTagName('head')[0];
 
+                /*
                 let meta = document.createElement('meta');
                 meta.setAttribute('property', "theme-color");
                 meta.content = "#93E6FA";
@@ -241,7 +240,7 @@ function AddMetaTags() {
                 meta.setAttribute('property', "og:url");
                 meta.content = document.URL;
                 meta.name = "og:url";
-                head.appendChild(meta);
+                head.appendChild(meta);*/
             }
         })
     }
