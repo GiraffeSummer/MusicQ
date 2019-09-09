@@ -137,17 +137,23 @@ function LoopQueue() {
 
 function KeepAlive(_keep) {
     keep = _keep;
+    let keepAlive;
+    let refreshMinutes = 5;
+    let refreshTime = (refreshMinutes * 1000) * 60//;300000;//every 5 minutes
     if (keep) {
-        let keepAlive = setInterval(function () {
-            console.log("loop")
+        keepAlive = setInterval(function () {
+            console.log("Keeping alive")
             if (keep == true) {
                 GetURL(ApiUrl + "rooms").then(function (data) {
                     data = JSON.parse(data);
                 })
-            } else {
-                clearInterval(keepAlive)
             }
-        }, 300000) //every 5 minutes
+        }, refreshTime)
+        return `KeepAlive enabled (refreshing every ${(refreshTime / 1000) / 60} minutes)`
+    } else {
+        if (keepAlive)
+            clearInterval(keepAlive)
+        return "KeepAlive disabled"
     }
 }
 
