@@ -25,6 +25,22 @@ function ClickCreateRoom() {
     document.location.pathname = "MusicQ/Room/Create.html";
 }
 
+function CheckPlaylist() {
+    console.log("checking playlist");
+    let playlist = document.getElementById("roomPlaylist");
+    let playId = (getParameterByName("list", playlist.value)) ? getParameterByName("list", playlist.value) : encodeURI(playlist.value);
+    GetURL(ApiUrl + "checkplaylist" + `?playlistId=${playId}`).then(function (data) {
+        data = JSON.parse(data);
+
+        if (data.valid) {
+            alert(`Playlist found: ${data.playlist.title}`);
+        }
+        else {
+            alert("No playlist found");
+        }
+    });
+}
+
 function CreateRoom() {
     if (document.title == "Room Picker") return;
 
@@ -110,4 +126,14 @@ function ShowRooms(rooms) {
         row.appendChild(cell3);
         table.appendChild(row);
     }
+}
+
+function tempAlert(msg, duration) {
+    var el = document.createElement("div");
+    el.setAttribute("style", "position:absolute;top:40%;left:20%;background-color:white;");
+    el.innerHTML = msg;
+    setTimeout(function () {
+        el.parentNode.removeChild(el);
+    }, duration);
+    document.body.appendChild(el);
 }

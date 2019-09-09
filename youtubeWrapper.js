@@ -60,6 +60,22 @@ module.exports.Search = function (
     });
 }
 
+module.exports.GetPlaylistInfo = function (params = {
+    playlistId: "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj",
+    key: "",
+    maxResults: 5
+}) {
+    var url = `https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${params.playlistId}&maxResults=${params.maxResults}&key=${params.key}`
+    return new Promise(function (resolve, reject) {
+        request({
+            url: url,
+            json: true
+        }, function (error, response, body) {
+            resolve(body)
+        });
+    });
+}
+
 
 module.exports.GetPlaylist = function (
     params = {
@@ -76,6 +92,7 @@ module.exports.GetPlaylist = function (
             json: true
         }, function (error, response, body) {
             GetPlayListVids(body, url).then(function (playlist) {
+                console.log(body)
                 resolve(playlist)
             })
         });

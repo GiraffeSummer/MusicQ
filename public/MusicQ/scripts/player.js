@@ -113,6 +113,32 @@ function NextVideo() {
     });
 }
 
+function PreviousVideo() {
+    GetURL(ApiUrl + "prev" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
+        data = JSON.parse(data);
+
+        if (("success" in data)) {
+            document.location.pathname = "/MusicQ/Room/"
+            return;
+        }
+
+        console.log("back");
+
+        if (data.previous[0] == data.Old) {
+            tempAlert("No more videos", 2000)
+            if (player !== undefined)
+                player.seekTo(0)
+        } else
+            if (data.previous[0] !== undefined) {
+                let title = document.getElementById("vidTitle");
+                title.textContent = data.previous[0].title;
+                ChangeVid(data.previous[0].id);
+            }
+    });
+}
+
+
+
 function ChangeVid(id) {
     if (player !== undefined) {
         player.loadVideoById(id)
@@ -187,4 +213,14 @@ function Showqueue(vids, showimgs = false) {
         row.appendChild(cell3);
         table.appendChild(row);
     }
+}
+
+function tempAlert(msg, duration) {
+    var el = document.createElement("div");
+    el.setAttribute("style", "position:absolute;top:40%;left:20%;background-color:white;");
+    el.innerHTML = msg;
+    setTimeout(function () {
+        el.parentNode.removeChild(el);
+    }, duration);
+    document.body.appendChild(el);
 }

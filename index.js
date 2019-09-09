@@ -94,6 +94,46 @@ try {
         }
     })
 
+
+    app.get('/prev', function (req, res) {
+        if (!("id" in req.query && players[req.query.id])) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ success: false, message: "room doesn't exist" }));
+            res.end();
+            return;
+        }
+
+        let id = req.query.id;
+
+        let now = Math.round(Date.now() / 1000);
+        players[id].timestamp = now;
+
+        if (players[id].previous.length >= 1) {
+            let ret = {
+                Old: players[id].np,
+                current: players[id].queue[0],
+                queue: players[id].queue,
+                previous: players[id].previous
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(ret);
+            res.end();
+            UnShiftSong(id);
+        } else {
+            //no old songs
+            let ret = {
+                Old: players[id].previous[0],
+                current: players[id].np,
+                queue: players[id].queue,
+                previous: players[id].previous
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.send(ret);
+            res.end();
+            UnShiftSong(id);
+        }
+    })
+
     app.get('/current', function (req, res) {
         if ("id" in req.query && players[req.query.id]) {
             let id = req.query.id;
@@ -174,6 +214,21 @@ try {
         res.end();
     })
 
+    app.get('/checkplaylist', function (req, res) {
+        let playlistId = req.query.playlistId;
+        console.log("checking playlist: " + playlistId);
+        yt.GetPlaylistInfo({ playlistId: playlistId, key: auth.youtube, maxResults: 1 }).then(function (data) {
+
+            let pl;
+            if (data && data.items.length > 0)
+                pl = data.items[0].snippet;
+            else pl = undefined;
+
+            res.setHeader('Content-Type', 'application/json');
+            res.send({ valid: (data && data.items.length > 0), used: playlistId, playlist: pl });
+            res.end();
+        })
+    })
 
     app.post('/search', function (req, res) {
         var body = req.body;
@@ -277,6 +332,16 @@ try {
         if (!(Object.entries(players[id].np).length === 0 && players[id].np.constructor === Object))//check if object is not empty
             players[id].previous.unshift(players[id].np);
         players[id].np = players[id].queue.shift();
+        let now = Math.round(Date.now() / 1000);
+        players[id].timestamp = now;
+    }
+
+    function UnShiftSong(id) {
+        if (players[id].previous.length >= 1) {
+            if (!(Object.entries(players[id].np).length === 0 && players[id].np.constructor === Object))//check if object is not empty
+                players[id].queue.unshift(players[id].np);
+            players[id].np = players[id].previous.shift();
+        }
         let now = Math.round(Date.now() / 1000);
         players[id].timestamp = now;
     }
