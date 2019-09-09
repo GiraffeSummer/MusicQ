@@ -135,10 +135,10 @@ function LoopQueue() {
     })
 }
 
+let keepAlive;
 function KeepAlive(_keep) {
     keep = _keep;
-    let keepAlive;
-    let refreshMinutes = 5;
+    let refreshMinutes = 0.1;
     let refreshTime = (refreshMinutes * 1000) * 60//;300000;//every 5 minutes
     if (keep) {
         keepAlive = setInterval(function () {
