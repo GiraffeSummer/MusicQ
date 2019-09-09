@@ -223,7 +223,8 @@ try {
             if (data && data.items.length > 0)
                 pl = data.items[0].snippet;
             else pl = undefined;
-            console.log("playlist found: " + pl.title);
+
+            console.log((pl)? "playlist found: " + pl.title : "no playlist found");
 
             res.setHeader('Content-Type', 'application/json');
             res.send({ valid: (data && data.items.length > 0), used: playlistId, playlist: pl });
