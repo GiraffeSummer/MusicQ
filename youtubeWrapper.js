@@ -92,7 +92,6 @@ module.exports.GetPlaylist = function (
             json: true
         }, function (error, response, body) {
             GetPlayListVids(body, url).then(function (playlist) {
-                console.log(body)
                 resolve(playlist)
             })
         });
