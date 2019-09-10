@@ -5,18 +5,6 @@ window.onload = function Start() {
     console.log("id: " + id);
 
     if (id === undefined || id === 0 || id === null) {
-        //create new instance
-
-        //Create screen for this
-        /*  if (window.confirm("Confirm: Join\nCancel: Create New")) {
-              document.location = updateQueryParameter(window.location.href, "id", window.prompt("Enter Instance name:", "party"));
-          } else {
-              Post({ name: window.prompt("Enter Instance ID:", "party"), playlistId: "PLhi2YmQ3_ONkoWbNAZGudCOOg95nv_Es0" }, ApiUrl + "new").then(function (data) {
-                  console.log(data)
-                  document.location = updateQueryParameter(window.location.href + "player/", "id", data.id);
-              })
-          }*/
-
         document.location.pathname = "/MusicQ/Room/";
     }
 }
