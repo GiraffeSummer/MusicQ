@@ -12,17 +12,41 @@ function Start() {
         if (document.title == "Music Player")
             GenerateQR()
     } else {
+        let page = document.getElementsByClassName("PlaylistInfo")[0];
         GetURL(ApiUrl + "playlist" + `${(getParameterByName("id") !== null) ? `?id=${getParameterByName("id")}` : ""}`).then(function (data) {
             data = JSON.parse(data);
-            console.log(data)
+            
+            page.style["margin-left"] = "20px"
+
             if (("success" in data)) {
                 document.location.pathname = "/MusicQ/Room/"
                 return;
             }
-            console.log(data.items)
             Showqueue(data.items, true)
-        });
 
+            GetURL(ApiUrl + "checkplaylist" + `?playlistId=${data.items[0].playlistId}`).then(function (_data) {
+                _data = JSON.parse(_data);
+                console.log(_data)
+                let playlistImg = document.createElement("img");
+                let playlistTitle = document.createElement("h3");
+
+                playlistImg.setAttribute("alt", _data.title);
+                playlistImg.src = _data.playlist.thumbnails.default.url;
+
+                playlistTitle.innerText = _data.playlist.title;
+
+                page.appendChild(playlistTitle);
+               // page.appendChild(document.createElement("br"));
+               // page.appendChild(playlistImg);
+
+                
+               /// page.appendChild(document.createElement("br"));
+
+                let plLength = document.createElement("b");
+                plLength.innerText = "Videos: " + data.pageInfo.totalResults;
+               // page.appendChild(plLength);
+            });
+        });
     }
 }
 
