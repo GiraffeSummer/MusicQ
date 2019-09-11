@@ -123,7 +123,7 @@ function ShowRooms(rooms) {
 
         row.className = "table-row";
         cell1.className = "col col-1";
-        cell2.className = "col col-2";//
+        cell2.className = "col col-2 roomImg";//
         cell3.className = "col col-3";
 
         row.appendChild(cell1);

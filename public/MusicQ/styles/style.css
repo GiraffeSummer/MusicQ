@@ -2,7 +2,6 @@ body {
     background-color: grey;
 }
 
-
 li.table-row {
     border: 3px solid black;
     border-radius: 4px;
@@ -18,8 +17,11 @@ li.table-row:hover {
 
 .col-2 {
     float: left;
-    max-width: 120px;
-    max-height: 90px;
+}
+
+.roomImg {
+    max-width: 256px;/*120px;*/
+    max-height: 144px;/*90px;*/
     object-fit: scale-down;
 }
 
@@ -40,10 +42,9 @@ li.table-row:hover {
     border-radius: 4px;
 }
 
-#searchBtn:hover  {
+#searchBtn:hover {
     background-color: lightcoral;
 }
-
 
 #playBtn {
     background-color: lightskyblue;
@@ -62,7 +63,7 @@ li.table-row:hover {
     border-radius: 4px;
 }
 
-#playBtn:hover  {
+#playBtn:hover {
     background-color: lightblue;
 }
 
@@ -75,7 +76,6 @@ input[type=text] {
     background-color: white;
     padding: 12px 20px;
 }
-
 
 #qBtn {
     background-color: grey;
@@ -94,6 +94,6 @@ input[type=text] {
     border-radius: 4px;
 }
 
-#qBtn:hover  {
+#qBtn:hover {
     background-color: whitesmoke;
 }
