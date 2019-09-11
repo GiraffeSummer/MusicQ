@@ -93,7 +93,7 @@ function ShowRooms(rooms) {
     RemoveChildren(table)
     for (let i = 0; i < rooms.length; i++) {
         var row = document.createElement("li");
-        var cell1 = document.createElement("div")
+        var cell1 = document.createElement("div").appendChild(document.createElement("b"))
         var cell2 = document.createElement("img")//
         var cell3 = document.createElement("div")
 
@@ -101,12 +101,18 @@ function ShowRooms(rooms) {
         anchor.setAttribute("name", rooms[i].id);
 
         (rooms[i].password !== "") ?
-            cell1.innerHTML = "🔒 <b>" + rooms[i].name + "</b>" :
-            cell1.innerHTML = "<b>" + rooms[i].name + "</b>";
-        //cell1.innerHTML += "&nbsp; - &nbsp;\nRoom id: " + rooms[i].id;
+            cell1.textContent = "🔒 " + rooms[i].name + "" :
+            cell1.textContent = "" + rooms[i].name + "";
+        //cell1.textContent += "&nbsp; - &nbsp;\nRoom id: " + rooms[i].id;
 
-        if (rooms[i].current !== undefined && rooms[i].current.thumbnails !== undefined)
-            cell2.src = rooms[i].current.thumbnails.default.url//
+        if (!rooms[i].image) {
+            if (rooms[i].current !== undefined && rooms[i].current.thumbnails !== undefined)
+                cell2.src = rooms[i].current.thumbnails.default.url//
+        } else
+            cell2.src = rooms[i].image;
+
+
+
         cell3.textContent = rooms[i].current.title;
 
 

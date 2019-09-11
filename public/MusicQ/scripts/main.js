@@ -49,16 +49,16 @@ function AddItems(vids) {
     for (let i = 0; i < Object.keys(vids.items).length; i++) {
 
         var row = document.createElement("li");
-        var cell1 = document.createElement("div")
+        var cell1 = document.createElement("div").appendChild(document.createElement("b"))
         var cell2 = document.createElement("img")
         var cell3 = document.createElement("div")
 
         var anchor = document.createElement("a")
         row.appendChild(anchor);
 
-        cell1.innerHTML = "<b>" + vids.items[i].title + "</b>";
+        cell1.textContent =  vids.items[i].title ;
         cell2.src = vids.items[i].thumbnails.default.url
-        cell3.innerHTML = vids.items[i].channelTitle;
+        cell3.textContent = vids.items[i].channelTitle;
 
         cell2.setAttribute("width", "246px");
         cell2.setAttribute("height", "137.6px")

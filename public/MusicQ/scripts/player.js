@@ -205,16 +205,16 @@ function Showqueue(vids, showimgs = false) {
     RemoveChildren(table)
     for (let i = 0; i < vids.length; i++) {
         var row = document.createElement("li");
-        var cell1 = document.createElement("div")
+        var cell1 = document.createElement("div").appendChild(document.createElement("b"))
         if (showimgs) var cell2 = document.createElement("img")//
         var cell3 = document.createElement("div")
 
         var anchor = document.createElement("a")
         row.appendChild(anchor);
 
-        cell1.innerHTML = "<b>" + vids[i].title + "</b>";
+        cell1.textContent = vids[i].title ;
         if (showimgs) cell2.src = vids[i].thumbnails.default.url;//vids[i][`thumbnails[default][url]`]//
-        cell3.innerHTML = vids[i].channelTitle;
+        cell3.textContent = vids[i].channelTitle;
 
 
         anchor.setAttribute("name", vids[i].id);

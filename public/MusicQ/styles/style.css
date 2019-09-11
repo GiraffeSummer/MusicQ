@@ -18,6 +18,9 @@ li.table-row:hover {
 
 .col-2 {
     float: left;
+    max-width: 120px;
+    max-height: 90px;
+    object-fit: scale-down;
 }
 
 #searchBtn {
