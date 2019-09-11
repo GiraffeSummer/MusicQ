@@ -21,6 +21,7 @@ function LoopRooms() {
 }
 
 
+
 function ClickCreateRoom() {
     document.location.pathname = "MusicQ/Room/Create.html";
 }
@@ -142,4 +143,26 @@ function tempAlert(msg, duration) {
         el.parentNode.removeChild(el);
     }, duration);
     document.body.appendChild(el);
+}
+
+//input the image node Object
+function ImgtoString(img) {
+    return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+
+        reader.addEventListener("load", function (d) {
+            let imgData = d.target.result;
+            resolve(imgData.toString());
+        });
+
+        reader.readAsDataURL(img)
+    })
+}
+
+function ImageGetExample() {
+    //<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+    let img = document.getElementById("avatar");
+    ImgtoString(img.files[0]).then((d) => {
+        console.log(d);
+    })
 }
