@@ -15,6 +15,7 @@ var player = {
     password: "",
     playlistId: "",
     timestamp: 0,
+    image: undefined,
     np: {},
     queue: [],
     previous: []
@@ -175,6 +176,7 @@ try {
             password: "",
             playlistId: "",
             current: "",
+            image: undefined
         };
 
         for (let index = 0; index < Object.keys(players).length; index++) {
@@ -185,6 +187,7 @@ try {
             o.password = players[Object.keys(players)[index]].password;
             o.playlistId = players[Object.keys(players)[index]].playlistId;
             o.current = players[Object.keys(players)[index]].np;
+            o.image = players[Object.keys(players)[index]].image;
             rooms.push(o);
         }
         callback(rooms);
@@ -194,7 +197,6 @@ try {
 
     app.post('/new', function (req, res) {
         var body = req.body;
-
         let obj = JSON.parse(JSON.stringify(player));
         let now = Math.round(Date.now() / 1000);
         obj.name = body.name;
@@ -207,6 +209,8 @@ try {
         obj.id = _id;
         obj.password = body.password;
         obj.timestamp = now;
+
+        obj.image = (body.image) ? body.image : undefined;
 
         players[obj.id] = obj;
         console.log(`New Room: ${obj.name} - "${obj.password}" - ${obj.id}`)
