@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Music App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+    <meta name="theme-color" content="#cc0000">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MusicQ" />
+    <meta property="og:description" content="Music App for everyone to Queue music remotely using their own phone" />
+    <meta property="og:url" content="http://musicq.cripplerick.com/" />
+    <meta property="og:image" content="" />
+</head>
+
+<body>
+
+
+    <div class="infoBox">
+        <button id="qBtn" class="input" onclick="document.location.pathname = `MusicQ/Room/Create.html`">Create Room</button>
+        <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Join Room</button>
+        <h3 class="Title" style="font-size: 21px;">MusicQ</h3>
+        <p class="info" style="font-size: 16px;">MusicQ is an app that allows users across multiple devices with
+            internet access to add videos from YouTube on a single playlist.<br> This is great for parties, as people
+            can add music from their own phone onto the playlist. </p>
+
+        <br>
+        <h4 class="quickstartTitle" style="font-size: 18px;">Quick-start Guide</h4>
+        <p class="quickStart">You can easily get started with MusicQ in a few steps:<br><br>
+            <b>Step 1: </b> Click on the button "Quick Start" or either of the buttons above.<br>
+            <b>Step 2: </b> Create a room, Enter a name that will help people find it<br>
+            <b>&nbsp; -Playlists:</b> Enter a Youtube Playlist ID or URL into the box, and click "Check Playlist" to
+            verify if it works<br>
+            <b>&nbsp; -Optional: </b> Enter a password and Playlist URL or ID<br>
+            <b>Step 3: </b> Let people add their own music/videos to the Queue by letting them find the room in the
+            list, or scan the QR code<br>
+            <b>Step 4: </b> Click on the QR-Code to add songs yourself from the same device<br><br>
+
+            <b>&nbsp; -Best usage: </b> Put the player on a laptop or computer connected to some kind of speaker(s)<br>
+        </p>
+        <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Quick Start</button>
+    </div>
+
+    <div id="footer">For more info, feedback, bugs or anything else, feel free to email: MusicQ&#64;cripplerick&#46;com</div>
+
+</body>
+
+<style>
+        * {
+            padding-left: 10px;
+        }
+
+        h4 {
+            margin-top: 5px;
+        }
+
+        .infoBox {
+            padding-top: 20px;
+            padding-bottom: 100px;
+        }
+
+        .Title {
+            padding-top: 10px;
+        }
+
+        #footer {
+            position: fixed;
+            color: #fefefe;
+            text-emphasis-style: bold;
+            bottom: 0px;
+            background-color: #202020;
+            left: 0px;
+            right: 0px;
+            padding: 15px
+        }
+    </style>
+
+</html>

@@ -41,7 +41,8 @@ try {
         nextt();
     });
 
-    app.get('/', function (req, res) { res.redirect('/MusicQ/Room'); })
+    app.get('/', function (req, res) { res.redirect('/MusicQ/Home'); })
+    app.get('/MusicQ/', function (req, res) { res.redirect('/MusicQ/Home'); })
 
     app.get('/next', function (req, res) {
 
@@ -173,8 +174,9 @@ try {
             id: 0,
             password: "",
             playlistId: "",
-            current: ""
+            current: "",
         };
+
         for (let index = 0; index < Object.keys(players).length; index++) {
             let o = JSON.parse(JSON.stringify(obj));
 
@@ -217,14 +219,13 @@ try {
     app.get('/checkplaylist', function (req, res) {
         let playlistId = req.query.playlistId;
         yt.GetPlaylistInfo({ playlistId: playlistId, key: auth.youtube, maxResults: 1 }).then(function (data) {
-            
 
             let pl;
             if (data && data.items.length > 0)
                 pl = data.items[0].snippet;
             else pl = undefined;
 
-            console.log((pl)? "playlist found: " + pl.title : "no playlist found");
+            //console.log((pl) ? "playlist found: " + pl.title : "no playlist found");
 
             res.setHeader('Content-Type', 'application/json');
             res.send({ valid: (data && data.items.length > 0), used: playlistId, playlist: pl });
@@ -316,15 +317,15 @@ try {
 
     app.listen(port, function () {
         console.log(`Music listening on port ${port}!`)
-        setInterval(PurgeRooms, 36000)//36000000 //for every 10 hours 1 hour inactive
+        setInterval(PurgeRooms, 3600000)//36000000 //for every 10 hours 1 hour inactive
     })
     //rn every 1 hour 10 hours inactive
     function PurgeRooms() {
-        let compare = 36000000;//36000 //for every 10 hours 1 hour inactive
+        let compare = 36000;//36000 //for every 10 hours 1 hour inactive//compare is in SECONDS NOT miliseconds
         let now = Math.round(Date.now() / 1000);
         for (let index = 0; index < Object.keys(players).length; index++) {
-            if ((now - compare) >= players[Object.keys(players)[index]].timestamp) {
-                console.log(`Out of time: ${players[Object.keys(players)[index]].name}`);
+            if (players[Object.keys(players)[index]].timestamp < (now - compare)) {
+                console.log(`Out of time: ${players[Object.keys(players)[index]].name} - aged: ${new Date((now - players[Object.keys(players)[index]].timestamp) * 1000).toISOString().substr(11, 8)}`);
                 delete players[Object.keys(players)[index]]
             }
         }
@@ -379,3 +380,8 @@ try {
         fs.writeFileSync(location, data);
     }
 }
+
+/* calculating time left
+let now = Math.round(Date.now() / 1000);
+o.timeLeft = `${new Date((players[Object.keys(players)[index]].timestamp - (now - 36000)) * 1000).toISOString().substr(11, 8)}`
+*/
