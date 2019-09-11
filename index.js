@@ -34,7 +34,7 @@ try {
 
 try {
     app.use(express.static('public'));
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({ extended: false , limit: "140kb"}));
 
     app.use(function (req, res, nextt) {
         res.header("Access-Control-Allow-Origin", "*");
