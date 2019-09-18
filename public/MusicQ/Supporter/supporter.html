@@ -13,7 +13,7 @@
 <body>
     <div class="buttons">
         <button id="qBtn" class="input"
-            onclick='Login(prompt("what is your supporter key?"),(ret)=> {if(ret) document.location.reload()}); else alert("You are not a supporter") '>Login</button>
+            onclick='Login(prompt("what is your supporter key?"),(ret)=> {if(ret) document.location.reload(); else alert("You are not a supporter")});  '>Login</button>
         <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Rooms</button>
     </div>
     <div id="container" class="container"></div>
