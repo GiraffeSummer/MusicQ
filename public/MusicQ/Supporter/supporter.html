@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/basestyle.css'>
+    <title>Supporter Dashboard</title>
+</head>
+
+<body>
+    <div class="buttons">
+        <button id="qBtn" class="input"
+            onclick='Login(prompt("what is your supporter key?"),(ret)=> {if(ret) document.location.reload()}); '>Login</button>
+        <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Rooms</button>
+    </div>
+    <div id="container" class="container"></div>
+    <div id="footer">For more info, feedback, bugs or anything else, feel free to email: MusicQ&#64;cripplerick&#46;com
+    </div>
+    <script src='../scripts/supporter.js'></script>
+
+    <style>
+        p {
+            margin: 5px;
+        }
+
+        .container input[type=text] {
+            background-color: #2C2F33;
+            color: #fefefe;
+            border: 1px solid #202020;
+            border-radius: 2px;
+            margin: 5px;
+            font-weight: bold;
+            width: 70px;
+            text-align: center;
+        }
+
+        .container {
+            overflow: hidden;
+            white-space: pre-wrap;
+            margin-left: 30px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            margin-left: 20px;
+
+        }
+
+        #footer {
+            position: fixed;
+            color: #fefefe;
+            text-emphasis-style: bold;
+            bottom: 0px;
+            background-color: #202020;
+            left: 0px;
+            right: 0px;
+            padding: 15px
+        }
+    </style>
+    <script>
+        let container = document.getElementById("container");
+        let components = [];
+        IsSupporter().then((supporter) => {
+            let title = document.createElement("h3");
+            components.push(title)
+
+            let Btn = document.createElement("button");
+
+            Btn.id = "qBtn";
+            Btn.class = "input"
+            Btn.onclick = GotoSupporterPage;
+
+            if (supporter.supporter) {
+                let code = document.createElement("p")
+                let key = document.createElement("p")
+                title.textContent = `Welcome ${supporter.name},\r\nYou are a supporter! 💸 `
+                let codeBox = document.createElement("input")
+                let copyBtn = document.createElement("button")
+
+                key.textContent = `Your supporter key is: `;
+                copyBtn.textContent = "Copy"
+                copyBtn.addEventListener("click", () => {
+                    CopyText(codeBox, copyBtn)
+                })
+                //copyBtn.id = "qBtn";
+                codeBox.value = supporter.key;
+                codeBox.readOnly = true;
+                codeBox.type = "text"
+                components.push(key);
+                components.push(codeBox)
+                components.push(copyBtn)
+
+                code.textContent += "Don't forget this, this is how you log in next time, write it down somewhere."
+                code.textContent += "\r\nThank you so much!\r\nAll supporter features will be available for you!"
+                code.textContent += "\r\nYou can find out what those features are by clicking the button below."
+                components.push(code);
+
+                Btn.textContent = "Supporter Page"
+                components.push(Btn);
+            } else {
+                title.textContent = "You are not a supporter!"
+                let intro = document.createElement("p")
+                components.push(intro)
+                intro.textContent = "If you are a supporter, you can login above, if you are not,\r\nYou can donate to become one below too."
+                Btn.textContent = "Become Supporter"
+                intro.textContent += `\r\nIf you want some more information about being a supporter,\r\nClick the "${Btn.textContent}" button too.`
+                components.push(Btn);
+
+                let forgot = document.createElement("p")
+                forgot.textContent = "Did you forgot your code, email your payment email to the email address.\r\nand I'll get back to you."
+
+                components.push(forgot)
+            }
+            AddAll();
+        });
+
+
+        function GotoSupporterPage() { document.location.pathname = "MusicQ/Supporter" }
+        function AddAll() {
+            for (let i = 0; i < components.length; i++) {
+                container.appendChild(components[i]);
+            }
+        }
+
+        function CopyText(textOrigin, btn, clickedText = "Copied") {
+            let ogText = btn.textContent;
+            if (btn.textContent == clickedText) return;
+
+            textOrigin.select();
+            textOrigin.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+            btn.textContent = clickedText;
+
+            setTimeout(function () {
+                btn.textContent = ogText;
+            }, 1500);
+        }
+    </script>
+    <script>
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+    </script>
+</body>
+
+</html>

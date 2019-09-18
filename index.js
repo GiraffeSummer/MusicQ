@@ -1,21 +1,24 @@
 var yt = require('./youtubeWrapper');
 const express = require('express')
 const bodyParser = require('body-parser');
+var session = require('express-session');
 var auth;
 const app = express()
 
 const defaultPlaylist = "PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj"; //default random playlist change to your liking
 var port;
 
+var Datastore = require('nedb')
+    , db = new Datastore({ filename: 'payments.db', autoload: true });
 
 var players = {}
 var player = {
     name: "",
     id: 0,
+    listed: true,
     password: "",
     playlistId: "",
     timestamp: 0,
-    image: undefined,
     np: {},
     queue: [],
     previous: []
@@ -33,8 +36,13 @@ try {
 
 
 try {
+    app.use(session({
+        secret: 'MusicQ',
+        resave: false,
+        saveUninitialized: true
+    }))
     app.use(express.static('public'));
-    app.use(bodyParser.urlencoded({ extended: false , limit: "140kb"}));
+    app.use(bodyParser.urlencoded({ extended: false, limit: "200kb" }));
 
     app.use(function (req, res, nextt) {
         res.header("Access-Control-Allow-Origin", "*");
@@ -175,8 +183,7 @@ try {
             id: 0,
             password: "",
             playlistId: "",
-            current: "",
-            image: undefined
+            current: ""
         };
 
         for (let index = 0; index < Object.keys(players).length; index++) {
@@ -185,9 +192,12 @@ try {
             o.name = players[Object.keys(players)[index]].name;
             o.id = players[Object.keys(players)[index]].id;
             o.password = players[Object.keys(players)[index]].password;
+            o.listed = players[Object.keys(players)[index]].listed;
             o.playlistId = players[Object.keys(players)[index]].playlistId;
             o.current = players[Object.keys(players)[index]].np;
-            o.image = players[Object.keys(players)[index]].image;
+            if (players[Object.keys(players)[index]].image)
+                o.image = players[Object.keys(players)[index]].image;
+
             rooms.push(o);
         }
         callback(rooms);
@@ -196,24 +206,27 @@ try {
 
 
     app.post('/new', function (req, res) {
-        var body = req.body;
+        let body = req.body;
         let obj = JSON.parse(JSON.stringify(player));
         let now = Math.round(Date.now() / 1000);
         obj.name = body.name;
-        obj.playlistId = (body.playlistId !== undefined && body.playlistId !== "undefined") ? body.playlistId : defaultPlaylist;
+        obj.playlistId = (body.playlistId) ? body.playlistId : defaultPlaylist;
         let _id = GenerateId();
+
 
         //making sure no duplicate id will be generated
         while (_id in players) _id = GenerateId(); //Will most likely not run (because no duplicate was generated)
 
+        if (body.image)
+            obj.image = body.image;
+
         obj.id = _id;
         obj.password = body.password;
+        obj.listed = (body.listed == "true") ? true : false;
         obj.timestamp = now;
 
-        obj.image = (body.image) ? body.image : undefined;
-
         players[obj.id] = obj;
-        console.log(`New Room: ${obj.name} - "${obj.password}" - ${obj.id}`)
+        console.log(`New Room: ${obj.name} - "${obj.password}" - ${obj.id} - image: ${(obj.image) ? true : false} - playlist: ${obj.playlistId}`)
 
         res.setHeader('Content-Type', 'application/json');
         res.send(obj);
@@ -223,7 +236,6 @@ try {
     app.get('/checkplaylist', function (req, res) {
         let playlistId = req.query.playlistId;
         yt.GetPlaylistInfo({ playlistId: playlistId, key: auth.youtube, maxResults: 1 }).then(function (data) {
-
             let pl;
             if (data && data.items.length > 0)
                 pl = data.items[0].snippet;
@@ -238,22 +250,109 @@ try {
     })
 
     app.post('/search', function (req, res) {
-        var body = req.body;
+        let body = req.body;
         let title = body.title;
         console.log(`Search: ` + title);
         yt.Search({ q: title, maxResults: 25, key: auth.youtube, type: "video", videoEmbeddable: "true", videoSyndicated: "any" }).then(AddObjs).catch(function (e) { console.log(e) })
 
         function AddObjs(o) {
+            let hour = 3600000
+            req.session.cookie.expires = new Date(Date.now() + hour)
+            req.session.cookie.maxAge = hour
             res.setHeader('Content-Type', 'application/json');
             res.send(o);
             res.end();
         }
     })
 
+    app.post('/checksupporter', function (req, res) {
+        let body = req.body;
+        db.find({ passkey: req.session.passkey }, (err, doc) => {
+            let success = (doc.length > 0);
+            req.session.supporter = success;
+
+            let ret = {
+                success: success,
+                session: req.session,
+                payment: doc[0]
+            }
+            AddObjs(ret)
+        })
+        function AddObjs(o) {
+            let hour = 3600000
+            req.session.cookie.expires = new Date(Date.now() + hour)
+            req.session.cookie.maxAge = hour
+            res.setHeader('Content-Type', 'application/json');
+            res.send(o);
+            res.end();
+        }
+    })
+
+    app.post('/supporter', function (req, res) {
+        let body = req.body;
+        db.find({ passkey: body.passkey }, (err, doc) => {
+            let success = (doc.length > 0);
+            req.session.supporter = success;
+            if (success)
+                req.session.passkey = doc[0].passkey;
+
+            let ret = {
+                success: success,
+                session: req.session,
+                payment: doc[0]
+            }
+            AddObjs(ret)
+        })
+
+
+        function AddObjs(o) {
+            let hour = 3600000
+            req.session.cookie.expires = new Date(Date.now() + hour)
+            req.session.cookie.maxAge = hour
+            res.setHeader('Content-Type', 'application/json');
+            res.send(o);
+            res.end();
+        }
+    })
+
+    app.post('/payment', function (req, res) {
+        let body = req.body;
+
+        let payment = {
+            _id: body._id,
+            time: body.time,
+            payer: {
+                country_code: body["payer[country_code]"],
+                email: body["payer[email]"],
+                payer_id: body["payer[payer_id]"],
+                name: body["payer[name]"],
+                surname: body["payer[surname]"]
+            },
+            purchase: {
+                currency: body["purchase[currency]"],
+                value: body["purchase[value]"]
+            },
+            status: body.status,
+            passkey: makeid(6)
+        }
+
+        db.insert(payment, function (err, newDoc) {
+            console.log(`-${newDoc.payer.name} ${newDoc.payer.surname} Just Became a supporter! their code: ${newDoc.passkey}`)
+            req.session.passkey = newDoc.passkey;
+            req.session.supporter = true;
+            let hour = 3600000
+            req.session.cookie.expires = new Date(Date.now() + hour)
+            req.session.cookie.maxAge = hour
+            res.setHeader('Content-Type', 'application/json');
+            res.send(newDoc);
+            res.end();
+        })
+    })
+
 
     app.post('/add', function (req, res) {
         let id = req.query.id;
-        var body = req.body;
+        let body = req.body;
 
         if (!("id" in req.query && players[req.query.id])) {
             res.setHeader('Content-Type', 'application/json');
@@ -269,6 +368,9 @@ try {
         AddObjs(body);
 
         function AddObjs(o) {
+            let hour = 3600000
+            req.session.cookie.expires = new Date(Date.now() + hour)
+            req.session.cookie.maxAge = hour
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify(o));
             res.end();
@@ -323,6 +425,12 @@ try {
         console.log(`Music listening on port ${port}!`)
         setInterval(PurgeRooms, 3600000)//36000000 //for every 10 hours 1 hour inactive
     })
+
+
+
+
+
+
     //rn every 1 hour 10 hours inactive
     function PurgeRooms() {
         let compare = 36000;//36000 //for every 10 hours 1 hour inactive//compare is in SECONDS NOT miliseconds
@@ -373,6 +481,17 @@ try {
     var _getRandomInt = function (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    function makeid(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
 } catch (error) {
     const fs = require('fs')
 

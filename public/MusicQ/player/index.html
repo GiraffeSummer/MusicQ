@@ -10,9 +10,12 @@
     <title>Music Player</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../styles/playerStyle.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/basestyle.css'>
+
 </head>
 
 <body>
+    <button id="backBtn" class="input" onclick="document.location.pathname = '/'">🏠</button>
     <script src="https://www.youtube.com/iframe_api"></script>
     <div class="left">
         <div>
@@ -23,15 +26,16 @@
         <button id="controlBtn" class="input" onclick="PreviousVideo()">⏮ Previous</button>
         <button id="controlBtn" class="input" onclick="NextVideo()">Skip ⏭</button>
     </div>
-
     <div class="right">
         <div class="PlayerVids">
             <div id="qrcode"></div>
+            <div><input id="shareUrl" type="text" readonly><button id="controlBtn" class="input" onclick="CopyText(document.getElementById('shareUrl'),this)">Copy</button></div>
             <table class="responsive-table">
                 <h3><strong>QUEUE:</strong></h3>
             </table>
         </div>
     </div>
+    <script src='../scripts/supporter.js'></script>
     <script src='../scripts/qrcode.min.js'></script>
     <script src='../scripts/main.js'></script>
     <script src='../scripts/player.js'></script>

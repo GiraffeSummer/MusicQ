@@ -108,6 +108,9 @@ function GenerateQR() {
         window.open(destination, '_blank');
     }, false);
     qr.style.cursor = "pointer";
+
+    let share = document.getElementById("shareUrl")
+    share.value = destination;
 }
 
 function NextVideo() {
@@ -185,7 +188,7 @@ function KeepAlive(_keep) {
         keepAlive = setInterval(function () {
             console.log("Keeping alive")
             if (keep == true) {
-                GetURL(ApiUrl + "rooms").then(function (data) {
+                GetURL(ApiUrl + "keepalive?id=" + getParameterByName("id")).then(function (data) {
                     data = JSON.parse(data);
                 })
             }

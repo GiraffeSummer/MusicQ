@@ -1,5 +1,6 @@
 var getUrl = window.location;
 var ApiUrl = getUrl.protocol + "//" + getUrl.host + "/";
+
 window.onload = function Start() {
     let id = getParameterByName("id")
     console.log("id: " + id);
@@ -7,6 +8,7 @@ window.onload = function Start() {
     if (id === undefined || id === 0 || id === null) {
         document.location.pathname = "/MusicQ/Room/";
     }
+
 }
 
 
@@ -56,7 +58,7 @@ function AddItems(vids) {
         var anchor = document.createElement("a")
         row.appendChild(anchor);
 
-        cell1.textContent =  vids.items[i].title ;
+        cell1.textContent = vids.items[i].title;
         cell2.src = vids.items[i].thumbnails.default.url
         cell3.textContent = vids.items[i].channelTitle;
 
@@ -85,7 +87,6 @@ function vidClicked(vid) {
 
     var obj = vid;
     Post(obj, ApiUrl + "add" + `?id=${getParameterByName("id")}`).then(function (d) {
-        console.log(d);
 
         if (("succes" in d))
             document.location.pathname = "/MusicQ/Room/"
@@ -127,6 +128,21 @@ function SeeQ(a = null) {
             document.location.pathname = "/MusicQ/";
             break;
     }
+}
+
+function CopyText(textOrigin, btn, clickedText = "Copied") {
+    let ogText = btn.textContent;
+    if (btn.textContent == clickedText) return;
+
+    textOrigin.select();
+    textOrigin.setSelectionRange(0, 99999);
+
+    document.execCommand("copy");
+    btn.textContent = clickedText;
+
+    setTimeout(function () {
+        btn.textContent = ogText;
+    }, 1500);
 }
 
 function getParameterByName(name, url) {
@@ -180,7 +196,7 @@ function AddMetaTags() {
     if (id !== undefined || id !== 0 || id !== null) {
         GetURL(ApiUrl + "current?id=" + id).then(function (data) {
             data = JSON.parse(data);
-            console.log(data)
+           // console.log(data)
 
             if (("success" in data)) {
                 //general meta tag

@@ -9,10 +9,12 @@
     <title>Playlist</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/basestyle.css'>
 
 </head>
 
 <body>
+        <button id="backBtn" class="input" onclick="document.location.pathname = '/'">🏠</button>
     <div class="VideoQ">
 
         <h3><strong>Playlist: </strong><button id="qBtn" class="input" onclick="SeeQ()">Add Songs</button><button id="qBtn" class="input" onclick="SeeQ('Q')">See Queue</button></h3>
@@ -20,6 +22,7 @@
         <table class="responsive-table"></table>
     </div>
 
+    <script src='../scripts/supporter.js'></script>
     <script src='../scripts/main.js'></script>
     <script src='../scripts/player.js'></script>
 </body>

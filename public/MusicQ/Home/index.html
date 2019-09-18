@@ -7,6 +7,7 @@
     <title>Music App</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/basestyle.css'>
     <meta name="theme-color" content="#cc0000">
     <meta property="og:type" content="website">
     <meta property="og:title" content="MusicQ" />
@@ -19,7 +20,8 @@
 
 
     <div class="infoBox">
-        <button id="qBtn" class="input" onclick="document.location.pathname = `MusicQ/Room/Create.html`">Create Room</button>
+        <button id="qBtn" class="input" onclick="document.location.pathname = `MusicQ/Room/Create.html`">Create
+            Room</button>
         <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Join Room</button>
         <h3 class="Title" style="font-size: 21px;">MusicQ</h3>
         <p class="info" style="font-size: 16px;">MusicQ is an app that allows users across multiple devices with
@@ -41,40 +43,42 @@
             <b>&nbsp; -Best usage: </b> Put the player on a laptop or computer connected to some kind of speaker(s)<br>
         </p>
         <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Room`">Quick Start</button>
+        <br>
+        <div id="supporterInfo">Check out what it's like to be a supporter and get some cool bonusses here:</div>
+        <button id="qBtn" class="input" onclick="document.location.pathname = `/MusicQ/Supporter`">Become a
+            supporter</button>
+        <button id="qBtn" class="input"
+            onclick="document.location.pathname = `/MusicQ/Supporter/supporter.html`">Supporter Dashboard</button>
     </div>
 
-    <div id="footer">For more info, feedback, bugs or anything else, feel free to email: MusicQ&#64;cripplerick&#46;com</div>
+    <div id="footer">For more info, feedback, bugs or anything else, feel free to email: MusicQ&#64;cripplerick&#46;com
+    </div>
 
+    <script src='../scripts/supporter.js'></script>
 </body>
 
 <style>
-        * {
-            padding-left: 10px;
-        }
+    * {
+        padding-left: 10px;
+    }
 
-        h4 {
-            margin-top: 5px;
-        }
+    h4 {
+        margin-top: 5px;
+    }
 
-        .infoBox {
-            padding-top: 20px;
-            padding-bottom: 100px;
-        }
+    .infoBox {
+        padding-top: 20px;
+        padding-bottom: 100px;
+    }
 
-        .Title {
-            padding-top: 10px;
-        }
+    .Title {
+        padding-top: 10px;
+    }
 
-        #footer {
-            position: fixed;
-            color: #fefefe;
-            text-emphasis-style: bold;
-            bottom: 0px;
-            background-color: #202020;
-            left: 0px;
-            right: 0px;
-            padding: 15px
-        }
-    </style>
+    #supporterInfo {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+</style>
 
 </html>

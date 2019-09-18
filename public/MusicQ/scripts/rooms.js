@@ -5,8 +5,7 @@ let currentRooms;
 function Start() {
     if (document.title == "Room Picker") {
         LoopRooms();
-        setInterval(LoopRooms, 500);
-
+        setInterval(LoopRooms, 1000);
     }
 }
 
@@ -20,10 +19,8 @@ function LoopRooms() {
     })
 }
 
-
-
 function ClickCreateRoom() {
-    document.location.pathname = "MusicQ/Room/Create.html";
+    document.location.pathname = "/MusicQ/Room/Create.html";
 }
 
 function CheckPlaylist() {
@@ -46,22 +43,50 @@ function CreateRoom() {
     if (document.title == "Room Picker") return;
 
     let name = document.getElementById("roomName").value;
+    if (name.length < 1) {
+        alert("Please enter a name!")
+        return;
+    }
     let pass = document.getElementById("roomPass").value;
     let playlist = document.getElementById("roomPlaylist");
+    let listed = (document.getElementById("roomListed")) ? document.getElementById("roomListed").checked : true;
     // console.log(playlist.value)
-    let playId = getParameterByName("list", playlist.value);
-    //console.log(playId)
-    let newRoom = {
-        name: name,
-        password: pass,
-        playlistId: playId
-    }
+    let p_id = (getParameterByName("list", playlist.value)) ? getParameterByName("list", playlist.value) : playlist.value;
+    let playId = p_id;
 
-    //console.log(newRoom)
-    Post(newRoom, ApiUrl + "new").then(function (data) {
-        //console.log(data)
-        document.location = updateQueryParameter(ApiUrl + "MusicQ/player/", "id", data.id);
-    })
+    GetURL(ApiUrl + "checkplaylist" + `?playlistId=${playId}`).then(function (data) {
+        data = JSON.parse(data);
+
+        let newRoom = {
+            name: name,
+            password: pass,
+            playlistId: playId,
+            listed: listed
+        }
+
+        if (data.valid || playlist.value == "") {
+           // alert(`Playlist found: ${data.playlist.title}`);
+            if (document.getElementById("thumbnail")) {
+                ImageGetExample((d) => {
+                    if (d.image)
+                        newRoom.image = d.image;
+                    PostNewRoom(newRoom)
+                });
+            } else PostNewRoom(newRoom)
+        }
+        else {
+            //alert("No playlist found (make sure the playlist privacy is unlisted or public, not private!)");
+            alert("Playlist not valid.\nPlease enter a proper playlist URL or ID.\nLeave it blank for the default one.")
+            playlist.value = "";
+        }
+    });
+    function PostNewRoom(newRoom) {
+        //console.log(newRoom)
+        Post(newRoom, ApiUrl + "new").then(function (data) {
+            //console.log(data)
+            document.location = updateQueryParameter(ApiUrl + "MusicQ/player/", "id", data.id);
+        })
+    }
 }
 
 function JoinRoom(room) {
@@ -75,7 +100,7 @@ function JoinRoom(room) {
     }
 
     function GotoRoom() {
-        document.location = updateQueryParameter(ApiUrl + "MusicQ/", "id", room.id);
+        document.location = updateQueryParameter(ApiUrl + "MusicQ/", "id", room.id)
     }
 }
 
@@ -86,13 +111,15 @@ function ShowRooms(rooms) {
         id: 0,
         password: "",
         playlistId: "",
-        current: ""
+        current: "",
+        listed: false
     };
 
     var table = document.getElementsByClassName("responsive-table");
     table = table[0];
     RemoveChildren(table)
     for (let i = 0; i < rooms.length; i++) {
+        if (!rooms[i].listed) continue
         var row = document.createElement("li");
         var cell1 = document.createElement("div").appendChild(document.createElement("b"))
         var cell2 = document.createElement("img")//
@@ -107,7 +134,7 @@ function ShowRooms(rooms) {
         //cell1.textContent += "&nbsp; - &nbsp;\nRoom id: " + rooms[i].id;
 
         if (!rooms[i].image) {
-            if (rooms[i].current !== undefined && rooms[i].current.thumbnails !== undefined)
+            if (rooms[i].current && rooms[i].current.thumbnails)
                 cell2.src = rooms[i].current.thumbnails.default.url//
         } else
             cell2.src = rooms[i].image;
@@ -146,23 +173,39 @@ function tempAlert(msg, duration) {
 }
 
 //input the image node Object
-function ImgtoString(img) {
-    return new Promise(function (resolve, reject) {
-        var reader = new FileReader();
+function ImgtoString(img, callback) {
+    var reader = new FileReader();
 
-        reader.addEventListener("load", function (d) {
-            let imgData = d.target.result;
-            resolve(imgData.toString());
-        });
+    reader.addEventListener("load", function (d) {
+        let imgData = d.target.result;
+        let size = 4 * (imgData.toString().length / 3);
+        let imgObj = { size: (size / 1000).toFixed(2) + "kb", image: imgData.toString(), rawSize: size };
+        callback(imgObj);
+    });
 
-        reader.readAsDataURL(img)
+    reader.readAsDataURL(img)
+}
+var maxImgSize = 150000;
+function ImageGetExample(callback) {
+    //<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+    let img = document.getElementById("thumbnail");
+
+    if (img.files.length <= 0) callback({ image: undefined });
+    ImgtoString(img.files[0], (d) => {
+        if (d.rawSize > maxImgSize) {
+            alert(`File too big (${d.size} max: ${maxImgSize / 1000}kb)`);
+            img.value = "";
+        } else
+            callback(d);
     })
 }
 
-function ImageGetExample() {
-    //<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
-    let img = document.getElementById("avatar");
-    ImgtoString(img.files[0]).then((d) => {
-        console.log(d);
+function CheckImageFile() {
+    let img = document.getElementById("thumbnail");
+    ImgtoString(img.files[0], (d) => {
+        if (d.rawSize > maxImgSize) {
+            alert(`File too big (${d.size} max: ${maxImgSize / 1000}kb)`);
+            img.value = "";
+        }
     })
 }

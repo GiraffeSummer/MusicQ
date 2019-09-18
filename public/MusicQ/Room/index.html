@@ -10,6 +10,7 @@
     <title>Room Picker</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles/basestyle.css'>
     <meta name="theme-color" content="#cc0000">
     <meta property="og:type" content="website">
     <meta property="og:title" content="MusicQ" />
@@ -19,13 +20,15 @@
 </head>
 
 <body>
+    <button id="backBtn" class="input" onclick="document.location.pathname = '/'">🏠</button>
     <div class="container">
 
-        <h3><strong>Rooms: </strong><button id="qBtn" class="input" onclick="ClickCreateRoom()">Create Room</button>
+        <h3><strong>Rooms: </strong><button id="qBtn" class="input" onclick="document.location.pathname = `MusicQ/Room/Create.html`">Create Room</button>
         </h3>
         <table class="responsive-table"></table>
     </div>
 
+    <script src='../scripts/supporter.js'></script>
     <script src='../scripts/main.js'></script>
     <script src='../scripts/rooms.js'></script>
 </body>

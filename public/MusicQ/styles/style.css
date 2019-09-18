@@ -1,5 +1,5 @@
 body {
-    background-color: grey;
+    background-color: var(--grey);
 }
 
 li.table-row {
@@ -19,10 +19,20 @@ li.table-row:hover {
     float: left;
 }
 
+h3 {
+    margin-top: 5px;
+    padding: 5px;
+}
+
 .roomImg {
-    max-width: 256px;/*120px;*/
-    max-height: 144px;/*90px;*/
+    max-width: 256px;
+    /*120px;*/
+    max-height: 144px;
+    /*90px;*/
     object-fit: scale-down;
+    border-radius: 3px;
+    margin: 1px;
+    margin-right: 10px;
 }
 
 #searchBtn {
@@ -67,14 +77,20 @@ li.table-row:hover {
     background-color: lightblue;
 }
 
-input[type=text] {
-    width: 60%;
+.input[type=text] {
     box-sizing: border-box;
     border: 2px solid darkgrey;
     border-radius: 4px;
     font-size: 16px;
     background-color: white;
     padding: 12px 20px;
+    width: 60%;
+}
+
+@media (min-width: 100px) and (max-width: 600px) {
+    .input[type=text] {
+        width: 80%;
+    }
 }
 
 #qBtn {

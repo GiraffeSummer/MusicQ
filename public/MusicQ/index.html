@@ -6,7 +6,8 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Music App</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/basestyle.css'>
     <meta name="theme-color" content="#cc0000">
     <meta property="og:type" content="website">
     <meta property="og:title" content="MusicQ" />
@@ -16,6 +17,7 @@
 </head>
 
 <body>
+    <button id="backBtn" class="input" onclick="document.location.pathname = '/'">🏠</button>
     <h3>Search music to add to the queue <button id="qBtn" class="input" onclick="SeeQ()">See Queue</button><button
             id="qBtn" class="input" onclick="SeeQ(`playlistview`)">See Playlist</button></h3>
     <div class="container">
@@ -25,6 +27,8 @@
     <div class="Vids">
         <table class="responsive-table"></table>
     </div>
+
+    <script src='../scripts/supporter.js'></script>
     <script src='./scripts/main.js'></script>
 </body>
 

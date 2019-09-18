@@ -80,3 +80,8 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+
+#Databases
+database.db
+payments.db
