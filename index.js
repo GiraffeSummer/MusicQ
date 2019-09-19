@@ -2,6 +2,7 @@ var yt = require('./youtubeWrapper');
 const express = require('express')
 const bodyParser = require('body-parser');
 var session = require('express-session');
+const nodemailer = require('nodemailer')
 var auth;
 const app = express()
 
@@ -44,11 +45,6 @@ try {
     app.use(express.static('public'));
     app.use(bodyParser.urlencoded({ extended: false, limit: "200kb" }));
 
-    app.use(function (req, res, nextt) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        nextt();
-    });
 
     app.get('/', function (req, res) { res.redirect('/MusicQ/Home'); })
     app.get('/MusicQ/', function (req, res) { res.redirect('/MusicQ/Home'); })
@@ -338,6 +334,8 @@ try {
 
         db.insert(payment, function (err, newDoc) {
             console.log(`-${newDoc.payer.name} ${newDoc.payer.surname} Just Became a supporter! their code: ${newDoc.passkey}`)
+
+            SendEmail(newDoc.payer.email, `Hey ${newDoc.payer.name},<br><br>Here is your Supporter key: <b>${newDoc.passkey}</b><br><br>Enjoy being a supporter!<br>Thank you so much!<br><br>~MusicQ`);
             req.session.passkey = newDoc.passkey;
             req.session.supporter = true;
             let hour = 3600000
@@ -420,15 +418,19 @@ try {
         })
     })
 
-
+    var emailer;
     app.listen(port, function () {
         console.log(`Music listening on port ${port}!`)
         setInterval(PurgeRooms, 3600000)//36000000 //for every 10 hours 1 hour inactive
+
+        emailer = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: auth.email,
+                pass: auth.emailPass
+            }
+        });
     })
-
-
-
-
 
 
     //rn every 1 hour 10 hours inactive
@@ -490,6 +492,15 @@ try {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
+    }
+
+    async function SendEmail(to, body) {
+        let info = await emailer.sendMail({
+            from: '"MusicQ 🎵" <musicq@cripplerick.com>', // sender address
+            to: to, // list of receivers
+            subject: '💸MusicQ Supporter', // Subject line
+            html: body // plain text body
+        });
     }
 
 } catch (error) {

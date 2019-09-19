@@ -117,7 +117,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '2.50'
+                            value: '3.00'
                         }
                     }],
                     application_context: {
@@ -145,7 +145,7 @@
                         },
                         status: details.status
                     }
-                    alert('Thank you for supporting MusicQ, ' + details.payer.name.given_name + '!\nYou are now a MusicQ Supporter.');
+                    alert('Thank you for supporting MusicQ, ' + details.payer.name.given_name + '!\nYou are now a MusicQ Supporter.\nCheck your email address.');
                     Post(payment, '/payment').then(function (data) {
                         document.location.replace(`/MusicQ/supporter/supporter.html`);
                     });

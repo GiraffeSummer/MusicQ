@@ -79,6 +79,7 @@
                 title.textContent = `Welcome ${supporter.name},\r\nYou are a supporter! 💸 `
                 let codeBox = document.createElement("input")
                 let copyBtn = document.createElement("button")
+                let bookmark = document.createElement("a")
 
                 key.textContent = `Your supporter key is: `;
                 copyBtn.textContent = "Copy"
@@ -92,6 +93,11 @@
                 components.push(key);
                 components.push(codeBox)
                 components.push(copyBtn)
+                let bookmarkData = `javascript:Login("${supporter.key}",(ret)=> {if(ret)document.location.pathname = "/MusicQ/Room"; else alert("You are not a supporter") }) `
+                bookmark.href = encodeURI(bookmarkData);
+                bookmark.textContent = "🔖bookmark"
+                bookmark.title = "drag this to the bookmarks bar"
+                components.push(bookmark)
 
                 code.textContent += "Don't forget this, this is how you log in next time, write it down somewhere."
                 code.textContent += "\r\nThank you so much!\r\nAll supporter features will be available for you!"
