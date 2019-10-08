@@ -5,6 +5,15 @@
 -->
 
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149579125-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149579125-1');
+    </script>
+
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Music Player</title>
@@ -29,7 +38,8 @@
     <div class="right">
         <div class="PlayerVids">
             <div id="qrcode"></div>
-            <div><input id="shareUrl" type="text" readonly><button id="controlBtn" class="input" onclick="CopyText(document.getElementById('shareUrl'),this)">Copy</button></div>
+            <div><input id="shareUrl" type="text" readonly><button id="controlBtn" class="input"
+                    onclick="CopyText(document.getElementById('shareUrl'),this)">Copy</button></div>
             <table class="responsive-table">
                 <h3><strong>QUEUE:</strong></h3>
             </table>
