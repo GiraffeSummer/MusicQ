@@ -9,6 +9,16 @@ window.onload = function Start() {
         document.location.pathname = "/MusicQ/Room/";
     }
 
+
+    if (document.title == "MusicQ Search") {
+        let btn = document.getElementById("searchTag")
+        btn.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) /*Press Enter*/{
+              event.preventDefault();
+              document.getElementById("searchBtn").click();
+            }
+          }); 
+    }
 }
 
 
