@@ -131,7 +131,7 @@ function SeeQ(a = null) {
     }
 
     switch (document.title) {
-        case "Music App":
+        case "MusicQ Search":
             document.location.pathname = "/MusicQ/Q";
             break;
         default:
